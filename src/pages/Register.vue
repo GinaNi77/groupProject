@@ -18,7 +18,7 @@
                     v-model="form.password"
                 /> 
 
-                <div class="q-mt-lg">
+                <div class="q-mt-xl">
                     <q-btn outline size="md" color="black" label="Register" class="full-width" type="submit"/>     
                 </div>    
             </div>
