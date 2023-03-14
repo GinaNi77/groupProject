@@ -1,21 +1,37 @@
 <template>
-  <q-page class="flex flex-start q-pt-xl">
-    <div class="v-catalog flex flex-start q-px-xl">
+  <q-page class="flex justify-center q-px-xl">
+    <div class="v-catalog flex flex-start">
       <vCatalogItem v-for="item in items" :key="item.id" />
     </div>
-    <div class="v-menu">
-      <div class="v-gender">
-        <ul>
-          <li>Woman</li>
-          <li>Man</li>
-          <li>Kids</li>
-        </ul>
+    <div class="v-menu q-pl-sm">
+      <div class="v-gender q-pb-lg">
+        <q-list>
+          <q-item clickable dense v-ripple>
+            <q-item-section class="text-weight-bold">Woman</q-item-section>
+          </q-item>
+          <q-item clickable dense v-ripple>
+            <q-item-section class="text-weight-bold">Man</q-item-section>
+          </q-item>
+          <q-item clickable dense v-ripple>
+            <q-item-section class="text-weight-bold">Kids</q-item-section>
+          </q-item>
+        </q-list>
       </div>
-      <div class="v-attr">
-        <ul>
-          <li>Size</li>
-          <li>Price</li>
-        </ul>
+      <div class="v-attr q-pt-lg">
+        <q-list>
+          <q-item clickable dense v-ripple>
+            <q-item-section>Size</q-item-section>
+            <q-item-section avatar>
+              <q-avatar text-color="grey" size="sm" icon="add" />
+            </q-item-section>
+          </q-item>
+          <q-item clickable dense v-ripple>
+            <q-item-section>Price</q-item-section>
+            <q-item-section avatar>
+              <q-avatar text-color="grey" size="sm" icon="add" />
+            </q-item-section>
+          </q-item>
+        </q-list>
       </div>
     </div>
   </q-page>
@@ -42,10 +58,13 @@ const items = [
 
 <style scoped>
 .v-catalog {
-  max-width: 900px;
+  max-width: 830px;
 }
 .v-menu {
-  max-width: 350px;
+  max-width: 250px;
   width: 100%;
+}
+.v-gender {
+  border-bottom: solid black 1px;
 }
 </style>
