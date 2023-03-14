@@ -12,9 +12,11 @@
           class="text-black"
         />
 
+
         <q-toolbar-title class="text-black uppercase">
           Menu
         </q-toolbar-title>
+
 
       </q-toolbar>
     </q-header>
@@ -38,7 +40,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple>
+            <q-item to="/catalog" exact clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="store" />
               </q-item-section>
@@ -48,7 +50,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple>
+            <q-item to="/cart" exact clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="shopping_cart" />
               </q-item-section>
@@ -61,14 +63,20 @@
           </q-list>
         </q-scroll-area>
       </q-drawer>
+>>>>>>> test-merge
 
     <q-page-container>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
+
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -78,12 +86,12 @@ export default defineComponent({
 
     return {
       leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
+    };
+  },
+});
 </script>
 
 <style scoped>
