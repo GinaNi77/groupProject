@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="lHh Lpr lFf">
+    <q-header class="bg-white">
       <q-toolbar>
         <q-btn
           flat
@@ -9,35 +9,61 @@
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
+          class="text-black"
         />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-toolbar-title class="text-black uppercase">
+          Menu
+        </q-toolbar-title>
+
+
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+     <q-drawer
+        v-model="leftDrawerOpen"
+        show-if-above
+        :width="300"
+        :breakpoint="500"
+        class="bg-grey-1"
+      >
+        <q-scroll-area class="fit">
+          <q-list padding class="menu-list">
+            <q-item to="/" exact clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="login" />
+              </q-item-section>
 
-        <q-item to="/" exact clickable v-ripple>
-          <q-item-section avatar>
-            <q-icon name="store" />
-          </q-item-section>
+              <q-item-section>
+                Login
+              </q-item-section>
+            </q-item>
 
-          <q-item-section> Catalog </q-item-section>
-        </q-item>
+            <q-item to="/catalog" exact clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="store" />
+              </q-item-section>
 
-        <q-item to="/cart" exact clickable v-ripple>
-          <q-item-section avatar>
-            <q-icon name="shopping_cart" />
-          </q-item-section>
+              <q-item-section>
+                Catalog
+              </q-item-section>
+            </q-item>
 
-          <q-item-section> Cart </q-item-section>
-        </q-item>
-      </q-list>
-    </q-drawer>
+            <q-item to="/cart" exact clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="shopping_cart" />
+              </q-item-section>
+
+              <q-item-section>
+                Cart
+              </q-item-section>
+            </q-item>
+
+          </q-list>
+        </q-scroll-area>
+      </q-drawer>
+>>>>>>> test-merge
 
     <q-page-container>
       <router-view v-slot="{ Component }">
@@ -50,66 +76,15 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
 
-const linksList = [
-  {
-    title: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
-  },
-  {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: "MainLayout",
-
-  components: {
-    EssentialLink,
-  },
-
-  setup() {
-    const leftDrawerOpen = ref(false);
+  name: 'MainLayout',
+  setup () {
+    const leftDrawerOpen = ref(false)
 
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -118,3 +93,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.uppercase{
+  text-transform: uppercase;
+  letter-spacing: 7px;
+  font-size: 20px;
+}
+</style>
