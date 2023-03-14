@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header class="bg-white">
       <q-toolbar>
         <q-btn
           flat
@@ -9,35 +9,58 @@
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
+          class="text-black"
         />
 
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title class="text-black uppercase">
+          Menu
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+     <q-drawer
+        v-model="leftDrawerOpen"
+        show-if-above
+        :width="300"
+        :breakpoint="500"
+        class="bg-grey-1"
+      >
+        <q-scroll-area class="fit">
+          <q-list padding class="menu-list">
+            <q-item to="/" exact clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="login" />
+              </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+              <q-item-section>
+                Login
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="store" />
+              </q-item-section>
+
+              <q-item-section>
+                Catalog
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="shopping_cart" />
+              </q-item-section>
+
+              <q-item-section>
+                Cart
+              </q-item-section>
+            </q-item>
+
+          </q-list>
+        </q-scroll-area>
+      </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -114,3 +137,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.uppercase{
+  text-transform: uppercase;
+  letter-spacing: 7px;
+  font-size: 20px;
+}
+</style>
