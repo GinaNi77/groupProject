@@ -4,18 +4,34 @@
       <vCatalogItem v-for="item in items" :key="item.id" />
     </div>
     <div class="v-menu">
-      <div class="v-gender">
-        <ul>
-          <li>Woman</li>
-          <li>Man</li>
-          <li>Kids</li>
-        </ul>
+      <div class="v-gender q-pb-lg">
+        <q-list class="text-weight-bold">
+          <q-item clickable v-ripple>
+            <q-item-section>Woman</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Man</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Kids</q-item-section>
+          </q-item>
+        </q-list>
       </div>
-      <div class="v-attr">
-        <ul>
-          <li>Size</li>
-          <li>Price</li>
-        </ul>
+      <div class="v-attr q-pt-lg">
+        <q-list>
+          <q-item clickable v-ripple>
+            <q-item-section>Size</q-item-section>
+            <q-item-section avatar>
+              <q-icon color="primary" size="xs" name="add" />
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Price</q-item-section>
+            <q-item-section avatar>
+              <q-icon color="primary" size="xs" name="add" />
+            </q-item-section>
+          </q-item>
+        </q-list>
       </div>
     </div>
   </q-page>
@@ -47,5 +63,8 @@ const items = [
 .v-menu {
   max-width: 350px;
   width: 100%;
+}
+.v-gender {
+  border-bottom: solid grey 1px;
 }
 </style>
