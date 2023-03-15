@@ -1,6 +1,6 @@
 <template>
   <div
-    v-for="item in cart"
+    v-for="(item, index) in cart"
     :key="item.id"
     class="q-ma-md flex flex-center cart-item"
   >
@@ -58,6 +58,26 @@ export default defineComponent({
           amount: 24,
           ref: "3123/619",
         },
+        {
+          id: 2,
+          image: "../assets/images/vest.svg",
+          description: "WAISTCOAT WITH CONTRAST PIPING",
+          colour: "Navy Blue",
+          size: "",
+          units: 1,
+          amount: 24,
+          ref: "3123/619",
+        },
+        {
+          id: 3,
+          image: "../assets/images/vest.svg",
+          description: "WAISTCOAT WITH CONTRAST PIPING",
+          colour: "Navy Blue",
+          size: "",
+          units: 1,
+          amount: 24,
+          ref: "3123/619",
+        },
       ],
     };
   },
@@ -66,7 +86,9 @@ export default defineComponent({
       this.counter++;
     },
     decrement() {
-      this.counter--;
+      if (this.counter > 0) {
+        this.counter--;
+      }
     },
   },
 });
