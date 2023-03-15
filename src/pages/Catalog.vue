@@ -65,6 +65,6 @@ const items = [
   width: 100%;
 }
 .v-gender {
-  border-bottom: solid black 1px;
+  border-bottom: solid grey 1px;
 }
 </style>
