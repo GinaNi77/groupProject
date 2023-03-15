@@ -1,19 +1,15 @@
 <template>
-  <div
-    v-for="(item, index) in cart"
-    :key="item.id"
-    class="q-ma-md flex flex-center cart-item"
-  >
+  <div class="q-ma-md flex flex-center cart-item">
     <q-img
       style="width: 130px; height: 200px"
       alt="Picture"
-      :src="require('../assets/images/' + item.image)"
+      :src="require('../assets/images/' + cart.image)"
     />
     <div>
-      <p>{{ item.description }}</p>
-      <p>{{ item.ref }}</p>
+      <p>{{ cart.description }}</p>
+      <p>{{ cart.ref }}</p>
     </div>
-    <p>{{ item.colour }}</p>
+    <p>{{ cart.colour }}</p>
     <q-select
       filled
       v-model="sizeBtn"
@@ -30,17 +26,9 @@
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
-    <p>${{ item.amount }}</p>
+    <p>${{ cart.amount }}</p>
     <q-btn @click="deleteFromCart(index)" flat icon="delete" />
   </div>
-
-  <q-btn v-if="cart.length"
-    class="q-ma-md"
-    @click="deleteAllFromCart"
-    flat
-    label="Delete all"
-    icon="delete"
-  />
 </template>
 
 <script>
@@ -48,53 +36,19 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "CartItem",
+  props: {
+    cart: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+  },
   data() {
     return {
       sizeBtn: ref(null),
       options: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
       counter: ref(1), // counter должен менять item.units, надо вернуться сюда
-      cart: [
-        {
-          id: 1,
-          image: "vest.svg",
-          description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
-          size: "",
-          units: 1,
-          amount: 24,
-          ref: "3123/619",
-        },
-        {
-          id: 2,
-          image: "blouse.svg",
-          description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
-          size: "",
-          units: 1,
-          amount: 24,
-          ref: "3123/619",
-        },
-        {
-          id: 3,
-          image: "boots.svg",
-          description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
-          size: "",
-          units: 1,
-          amount: 24,
-          ref: "3123/619",
-        },
-        {
-          id: 4,
-          image: "shirt.svg",
-          description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
-          size: "",
-          units: 1,
-          amount: 24,
-          ref: "3123/619",
-        },
-      ],
     };
   },
   methods: {
@@ -109,9 +63,7 @@ export default defineComponent({
     deleteFromCart(index) {
       this.$emit("deleteFromCart", index);
     },
-    deleteAllFromCart() {
-      this.cart.splice(0, this.cart.length);
-    },
+    
   },
 });
 </script>
