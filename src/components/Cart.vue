@@ -13,9 +13,10 @@
     label="Delete all"
     icon="delete"
   />
-  <div v-if="!cart.length" class="absolute-center">
-    <q-icon name="check" size="150px" color="primary" />
-    <div class="text-h4 text-primary text-center">Your cart is empty...</div>
+  <div v-if="!cart.length" class="flex absolute-center column">
+    <q-icon name="shopping_cart" size="150px" color="primary" />
+    <div class="text-h4 text-primary">Your cart is empty...</div>
+    <q-btn class="q-ma-lg" to="/catalog" label="Back to Catalog" />
   </div>
 </template>
 
