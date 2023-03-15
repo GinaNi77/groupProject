@@ -20,7 +20,7 @@
     <div class="flex">
       <q-btn flat @click="increment()" label="+" />
       <input
-        v-model="counter"
+        v-model="cart.units"
         class="text-center no-border"
         style="width: 132px; height: 52px"
       />
@@ -48,22 +48,20 @@ export default defineComponent({
     return {
       sizeBtn: ref(null),
       options: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
-      counter: ref(1), // counter должен менять item.units, надо вернуться сюда
     };
   },
   methods: {
     increment() {
-      this.counter++;
+      this.cart.units++;
     },
     decrement() {
-      if (this.counter > 0) {
-        this.counter--;
+      if (this.cart.units > 0) {
+        this.cart.units--;
       }
     },
     deleteFromCart(index) {
       this.$emit("deleteFromCart", index);
     },
-    
   },
 });
 </script>
