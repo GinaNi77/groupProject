@@ -7,13 +7,12 @@
     <q-img
       style="width: 130px; height: 200px"
       alt="Picture"
-      src="../assets/images/blouse.svg"
+      :src="require('../assets/images/' + item.image)"
     />
     <div>
       <p>{{ item.description }}</p>
       <p>{{ item.ref }}</p>
     </div>
-
     <p>{{ item.colour }}</p>
     <q-select
       filled
@@ -32,17 +31,24 @@
       <q-btn flat @click="decrement()" label="-" />
     </div>
     <p>${{ item.amount }}</p>
-    <q-btn flat icon="delete" />
+    <q-btn @click="deleteFromCart(index)" flat icon="delete" />
   </div>
+
+  <q-btn v-if="cart.length"
+    class="q-ma-md"
+    @click="deleteAllFromCart"
+    flat
+    label="Delete all"
+    icon="delete"
+  />
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "CartItem",
-  setup() {
+  data() {
     return {
       sizeBtn: ref(null),
       options: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
@@ -50,7 +56,7 @@ export default defineComponent({
       cart: [
         {
           id: 1,
-          image: "../assets/images/vest.svg",
+          image: "vest.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           colour: "Navy Blue",
           size: "",
@@ -60,7 +66,7 @@ export default defineComponent({
         },
         {
           id: 2,
-          image: "../assets/images/vest.svg",
+          image: "blouse.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           colour: "Navy Blue",
           size: "",
@@ -70,7 +76,17 @@ export default defineComponent({
         },
         {
           id: 3,
-          image: "../assets/images/vest.svg",
+          image: "boots.svg",
+          description: "WAISTCOAT WITH CONTRAST PIPING",
+          colour: "Navy Blue",
+          size: "",
+          units: 1,
+          amount: 24,
+          ref: "3123/619",
+        },
+        {
+          id: 4,
+          image: "shirt.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           colour: "Navy Blue",
           size: "",
@@ -90,9 +106,16 @@ export default defineComponent({
         this.counter--;
       }
     },
+    deleteFromCart(index) {
+      this.$emit("deleteFromCart", index);
+    },
+    deleteAllFromCart() {
+      this.cart.splice(0, this.cart.length);
+    },
   },
 });
 </script>
+
 
 <style lang="scss">
 .cart-item {
