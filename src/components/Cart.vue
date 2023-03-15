@@ -1,4 +1,5 @@
 <template>
+  <p class="text-h4 text-weight-bold text-center">SHOPPING CART</p>
   <CartItem
     v-for="(item, index) in cart"
     :key="item.id"
@@ -13,6 +14,8 @@
     label="Delete all"
     icon="delete"
   />
+  <p class="text-h5 text-weight-bold text-center">TOTAL: ${{}}</p>
+  <q-btn to="/payment" class="q-my-md q-mx-auto" label="Checkout now" />
   <div v-if="!cart.length" class="flex absolute-center column">
     <q-icon name="shopping_cart" size="150px" color="primary" />
     <div class="text-h4 text-primary">Your cart is empty...</div>
@@ -83,6 +86,15 @@ export default defineComponent({
       this.cart.splice(0, this.cart.length);
     },
   },
+  // computed: {
+  //   totalPrice() {
+  //     let totalPrice = 0;
+  //     for (let i = 0; i < this.cart.length; i++) {
+  //       totalPrice += this.cart.amount[i];
+  //     }
+  //     return totalPrice;
+  //   },
+  // },
 });
 </script>
 
