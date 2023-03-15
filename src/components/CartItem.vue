@@ -26,7 +26,7 @@
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
-    <p>${{ cart.amount }}</p>
+    <p>${{ cart.amount * cart.units }}</p>
     <q-btn @click="deleteFromCart(index)" flat icon="delete" />
   </div>
 </template>
