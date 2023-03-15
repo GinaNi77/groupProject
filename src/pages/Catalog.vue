@@ -1,7 +1,9 @@
 <template>
   <q-page class="flex justify-center q-px-xl">
     <div class="v-catalog flex flex-start">
-      <vCatalogItem v-for="product in products" :key="product.id" :product="product"/>
+      <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">Loading...</div>
+      <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">Error: {{error.message}}</div>
+      <vCatalogItem v-else-if="products" v-for="product in products" :key="product.id" :product="product"/>
     </div>
     <div class="v-menu q-pl-sm">
       <div class="v-gender q-pb-lg">
@@ -41,7 +43,7 @@
 <script>
 import vCatalogItem from "src/components/v-catalog-item.vue";
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -54,7 +56,8 @@ export default defineComponent ({
     },
 
   setup() {
-    const {result} = useQuery(gql`
+    const flag = ref(false)
+    const {result, loading, error} = useQuery(gql`
         query MyQuery {
           products {
             id
@@ -66,7 +69,7 @@ export default defineComponent ({
 
       const products = computed(() => result.value?.products ?? [])
 
-    return {products};
+    return {products, loading, error};
   },
 })
 
