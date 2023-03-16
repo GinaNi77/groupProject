@@ -38,15 +38,42 @@
 
 <script>
 import { ref } from "vue";
+import { useQuasar } from "quasar";
 
 export default {
   name: "Payment",
   data() {
     return {
-      id: ref(null),
       phone: ref(null),
       card: ref(null),
+      accept: ref(false),
+      $q: useQuasar(),
     };
+  },
+  methods: {
+    onSubmit() {
+      if (this.accept !== true) {
+        this.$q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "You need to accept the license and terms first",
+        });
+      } else {
+        this.$q.notify({
+          color: "green-4",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Submitted",
+        });
+      }
+    },
+
+    onReset() {
+      this.phone = null;
+      this.card = null;
+      this.accept = false;
+    },
   },
 };
 </script>
