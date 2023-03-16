@@ -1,7 +1,7 @@
 <template>
   <q-card class="my-card q-mx-sm q-my-lg v-catalog-item no-box-shadow no-border-radius">  
 
-    <vProductPopup v-if="isProductPopupVisible"/>
+    <vProductPopup/>
 
     <img :src=" require('../assets/images/' + product.img)"/>
     <q-card-section class="q-pa-xs">
@@ -24,15 +24,13 @@
 <script>
 
 import { defineComponent, ref } from 'vue'
-import {vProductPopup} from "src/components/v-product-popup.vue"
-
+import {vProductPopup} from 'src/components/v-product-popup.vue'
 
 export default defineComponent ({
 
   name: "v-catalog-item",
   components:{
-    vProductPopup
-
+    vProductPopup,
   },
 
   props: {

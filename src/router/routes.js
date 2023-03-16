@@ -9,6 +9,7 @@ const routes = [
       { path: 'register', name:'register', component: () => import('pages/Register.vue') },
       { path: 'catalog', component: () => import('pages/Catalog.vue') },
       { path: 'cart', component: () => import('components/Cart.vue') },
+      { path: 'productPopup', component: () => import('components/v-product-popup.vue') },
     ]
   },
 
