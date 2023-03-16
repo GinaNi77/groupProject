@@ -1,20 +1,15 @@
 <template>
-  <div
-    v-for="item in cart"
-    :key="item.id"
-    class="q-ma-md flex flex-center cart-item"
-  >
+  <div class="q-ma-md flex flex-center cart-item">
     <q-img
       style="width: 130px; height: 200px"
       alt="Picture"
-      src="../assets/images/blouse.svg"
+      :src="require('../assets/images/' + cart.image)"
     />
     <div>
-      <p>{{ item.description }}</p>
-      <p>{{ item.ref }}</p>
+      <p>{{ cart.description }}</p>
+      <p>{{ cart.ref }}</p>
     </div>
-
-    <p>{{ item.colour }}</p>
+    <p>{{ cart.colour }}</p>
     <q-select
       filled
       v-model="sizeBtn"
@@ -25,52 +20,52 @@
     <div class="flex">
       <q-btn flat @click="increment()" label="+" />
       <input
-        v-model="counter"
+        v-model="cart.units"
         class="text-center no-border"
         style="width: 132px; height: 52px"
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
-    <p>${{ item.amount }}</p>
-    <q-btn flat icon="delete" />
+    <p>${{ cart.amount * cart.units }}</p>
+    <q-btn @click="deleteFromCart(index)" flat icon="delete" />
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "CartItem",
-  setup() {
+  props: {
+    cart: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+  },
+  data() {
     return {
       sizeBtn: ref(null),
       options: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
-      counter: ref(1), // counter должен менять item.units, надо вернуться сюда
-      cart: [
-        {
-          id: 1,
-          image: "../assets/images/vest.svg",
-          description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
-          size: "",
-          units: 1,
-          amount: 24,
-          ref: "3123/619",
-        },
-      ],
     };
   },
   methods: {
     increment() {
-      this.counter++;
+      this.cart.units++;
     },
     decrement() {
-      this.counter--;
+      if (this.cart.units > 0) {
+        this.cart.units--;
+      }
+    },
+    deleteFromCart(index) {
+      this.$emit("deleteFromCart", index);
     },
   },
 });
 </script>
+
 
 <style lang="scss">
 .cart-item {
