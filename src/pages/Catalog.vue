@@ -73,7 +73,7 @@ export default defineComponent ({
       }
       }`)
 
-      const products = computed(() => result.value?.products ?? [])
+    const products = computed(() => result.value?.products ?? [])
 
     return {products, loading, error};
   },
