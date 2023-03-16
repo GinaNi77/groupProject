@@ -14,8 +14,13 @@
     label="Delete all"
     icon="delete"
   />
-  <p class="text-h5 text-weight-bold text-center">TOTAL: ${{}}</p>
-  <q-btn v-if="cart.length" to="/payment" class="q-my-md q-mx-auto" label="Checkout now" />
+  <!-- <p class="text-h5 text-weight-bold text-center">TOTAL: ${{}}</p> -->
+  <q-btn
+    v-if="cart.length"
+    to="/payment"
+    class="q-my-md q-mx-auto"
+    label="Checkout now"
+  />
   <div v-if="!cart.length" class="flex absolute-center column">
     <q-icon name="shopping_cart" size="150px" color="primary" />
     <div class="text-h4 text-primary">Your cart is empty...</div>
