@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import vCatalogItem from "src/components/v-catalog-item.vue";
+import vCatalogItem from 'src/components/CatalogItem.vue';
 
 import { defineComponent, ref } from 'vue'
 import { computed } from 'vue'

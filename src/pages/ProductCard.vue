@@ -57,10 +57,6 @@ export default defineComponent({
          
         const productId = ref(parseInt(route.params.id))
 
-        onUpdated(() =>{
-            productId.value = (parseInt(route.params.id))
-        })
-
         console.log(productId.value)
 
         const {result, error} = useQuery(gql`
