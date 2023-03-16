@@ -1,11 +1,12 @@
 <template>
-  <q-card class="my-card q-mx-sm q-my-md v-catalog-item no-box-shadow no-border-radius">  
+  <q-card class="my-card q-mx-sm q-my-lg v-catalog-item no-box-shadow no-border-radius">  
     <img :src=" require('../assets/images/' + product.img)"/>
     <q-card-section class="q-pa-xs">
       <div class="text-weight-light">{{product.description}}</div>
       <div class="text-weight-bold">{{product.price}}</div>
-      <div class="text-weight-bold">{{product.title}}</div>
-      <q-btn class="flat q-mt-md full-width" outline @click="loadData(product.id)">buy</q-btn>
+      <q-btn class="flat q-mb-sm text-black full-width" size="sm" :ripple="false" flat @click="loadData(product.id)">learn more</q-btn>
+      <q-btn class="flat full-width" outline @click="loadData(product.id)">buy</q-btn>
+      
     </q-card-section>
   </q-card>
 </template>
