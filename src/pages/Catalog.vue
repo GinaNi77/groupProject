@@ -3,7 +3,13 @@
     <div class="v-catalog flex flex-start">
       <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">Loading...</div>
       <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">Error: {{error.message}}</div>
-      <vCatalogItem v-else-if="products" v-for="product in products" :key="product.id" :product="product"/>
+
+      <vCatalogItem 
+      v-else-if="products"
+      v-for="product in products"
+      :key="product.id"
+      :product="product"/>
+      
     </div>
     <div class="v-menu q-pl-sm">
       <div class="v-gender q-pb-lg">
@@ -49,7 +55,7 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export default defineComponent ({
-  name: "v-catalog-item",
+  name: "v-catalog",
 
   components: {
         vCatalogItem

@@ -1,8 +1,5 @@
 <template>
   <q-card class="my-card q-mx-sm q-my-lg v-catalog-item no-box-shadow no-border-radius">  
-
-    <vProductPopup/>
-
     <img :src=" require('../assets/images/' + product.img)"/>
     <q-card-section class="q-pa-xs">
       <div class="text-weight-light">{{product.description}}</div>
@@ -11,11 +8,16 @@
       <q-btn class="flat q-mb-sm text-black full-width" 
         size="sm" 
         :ripple="false" 
-        flat @click="showProductPopup">
+        flat
+        :to="`/product/${product.id}`">
         learn more
       </q-btn>
 
-      <q-btn class="flat full-width" outline @click="loadData(product.id)">buy</q-btn>
+      <q-btn class="flat full-width" 
+        outline 
+        @click="loadData(product.id)">
+        buy
+      </q-btn>
       
     </q-card-section>
   </q-card>
@@ -24,14 +26,10 @@
 <script>
 
 import { defineComponent, ref } from 'vue'
-import {vProductPopup} from 'src/components/v-product-popup.vue'
 
 export default defineComponent ({
 
   name: "v-catalog-item",
-  components:{
-    vProductPopup,
-  },
 
   props: {
         product:{
@@ -43,21 +41,13 @@ export default defineComponent ({
   },
 
   setup() {
-
-    const isProductPopupVisible = ref(false)
-
     const loadData = (id) => {
       console.log(id)
     }
 
-    const showProductPopup = ()=>{
-      isProductPopupVisible.value = true
-    }
-
     return {
-      loadData, isProductPopupVisible, showProductPopup
+      loadData
     }
-  
 }
 })
 
