@@ -1,12 +1,45 @@
 <template>
-    <div class="text-h2">New Page</div>
+    <!-- <div class="text-h2">New Page</div>
     <div>{{productId}}</div>
     <div v-for="product in products" :key="product.id">
         <div>{{product.title}}</div>    
-    </div>
-    
+    </div> -->
 
-    
+    <q-page class="flex justify-center q-pa-xl">
+    <div class="v-product flex justify-around" v-for="product in products" :key="product.id">
+      <div class="v-product-image">
+        <img :src=" require('../assets/images/' + product.img)"/>
+      </div>
+
+      <div class="v-product-about q-pl-sm">
+        <div class="text-weight-bold text-h3 q-mb-md">{{product.title}}</div>
+        <div class="text-h6  q-mb-md"><q-icon class="q-pb-xs" name="attach_money"></q-icon>{{ product.price }}</div>
+
+        <div class="flex justify-between items-stretch q-py-sm">
+          <div class="v-product-about-block">
+            <div class="text-h5 text-weight-bold text-grey-6 q-my-sm">DESCRIPTION</div>
+            <div class="text-body1 q-mb-lg">{{ product.description }}</div>
+          </div>
+
+          <div class="v-product-about-block ">
+            <div class="text-h5 text-weight-bold text-grey-6 q-my-sm">SUMMARY</div>
+            <div class="text-body1">Color: {{product.color}}</div>
+            <div class="text-body1 q-mb-lg">Sex: {{product.sex}}</div>
+            <q-btn
+              class="bg-black text-white"
+              style="height: 56px"
+              flat
+              square
+              stretch
+              no-caps
+              icon-right="add"
+              label="Add to cart"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -40,6 +73,7 @@ export default defineComponent({
             title
             sex
             size
+            color
       }
       }`,   {
                 id: productId.value,         
@@ -53,3 +87,17 @@ export default defineComponent({
     },
 })
 </script>
+
+<style scoped>
+.v-product {
+  max-width: 900px;
+  width: 100%;
+}
+.v-product-image,
+.v-product-about {
+  max-width: 400px;
+}
+
+
+
+</style>

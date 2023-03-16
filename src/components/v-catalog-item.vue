@@ -2,7 +2,7 @@
   <q-card class="my-card q-mx-sm q-my-lg v-catalog-item no-box-shadow no-border-radius">  
     <img :src=" require('../assets/images/' + product.img)"/>
     <q-card-section class="q-pa-xs">
-      <div class="text-weight-light">{{product.description}}</div>
+      <div class="text-weight-light">{{product.title}}</div>
       <div class="text-weight-bold">{{product.price}}</div>
 
       <q-btn class="flat q-mb-sm text-black full-width" 

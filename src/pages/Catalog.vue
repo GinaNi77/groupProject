@@ -67,7 +67,7 @@ export default defineComponent ({
         query MyQuery {
           products {
             id
-            description
+            title
             price
             img
       }
