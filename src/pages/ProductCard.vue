@@ -1,7 +1,10 @@
 <template>
     <div class="text-h2">New Page</div>
     <div>{{productId}}</div>
-    <div>{{products}}</div>
+    <div v-for="product in products" :key="product.id">
+        <div>{{product.title}}</div>    
+    </div>
+    
 
     
 </template>
@@ -19,14 +22,16 @@ export default defineComponent({
     setup() {
         const route = useRoute()
          
-        const productId = ref("")
+        const productId = ref(parseInt(route.params.id))
 
         onUpdated(() =>{
-            productId.value = route.params.id
+            productId.value = (parseInt(route.params.id))
         })
 
-        const {result} = useQuery(gql`
-        query MyQuery($id: Int) {
+        console.log(productId.value)
+
+        const {result, error} = useQuery(gql`
+        query MyQuery ($id: Int){
           products (where: {id: {_eq: $id}}){
             id
             description
@@ -36,11 +41,14 @@ export default defineComponent({
             sex
             size
       }
-      }`)
+      }`,   {
+                id: productId.value,         
+            }
+    )
       const products = computed(() => result.value?.products ?? [])
         
         return{
-            productId, route, products
+            productId, route, products, error
         }
     },
 })
