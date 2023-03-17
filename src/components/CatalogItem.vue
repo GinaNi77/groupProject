@@ -9,7 +9,7 @@
         <div class="text-weight-light text-caption">{{ product.title }}</div>
         <div class="text-weight-bold">{{ product.price }}</div>
 
-      <q-btn class="flat full-width" 
+      <!-- <q-btn class="flat full-width" 
         outline 
         @click="loadData(product.id)">
         buy
