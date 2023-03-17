@@ -19,10 +19,10 @@
       <div class="v-menu">
         <div class="v-gender q-pb-lg">
           <q-list>
-            <q-item clickable @click="Filter()" dense v-ripple>
+            <q-item clickable @click="Filter('F')" dense v-ripple>
               <q-item-section class="text-weight-bold">Woman</q-item-section>
             </q-item>
-            <q-item clickable @click="Filter('sex', 'M')" v-ripple>
+            <q-item clickable @click="Filter('M')" v-ripple>
               <q-item-section>Man</q-item-section>
             </q-item>
             <q-item clickable v-ripple>
@@ -91,7 +91,6 @@ export default defineComponent({
     const products = computed(() => result.value?.products ?? []);
 
     onResult(() => {
-      console.log(products.value);
       products.value.forEach((item) => {
         items.value.push(item);
       });
@@ -113,24 +112,31 @@ export default defineComponent({
     //   return items;
     // };
 
-    const Filter = () => {
-      const { result, loading, error, onResult } = useQuery(gql`
-        query MyQuery {
-          products(where: { sex: { _eq: "F" } }) {
-            id
-            img
-            price
-            title
-            sex
-            size
+    const Filter = (sex) => {
+      const { result, refetch, onResult } = useQuery(
+        gql`
+          query MyQuery($param: String) {
+            products(where: { sex: { _eq: $param } }) {
+              id
+              img
+              price
+              title
+              sex
+              size
+            }
           }
+        `,
+        {
+          param: sex,
         }
-      `);
+      );
 
       onResult(() => {
-        console.log(result.value.products);
         items.value = result.value.products;
       });
+
+      refetch();
+      return items;
     };
 
     return { items, products, loading, error, Filter };
