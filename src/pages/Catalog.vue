@@ -10,7 +10,7 @@
     <div class="flex justify-center q-mt-lg" v-else-if="products">
       <div class="v-catalog flex flex-start">
         <vCatalogItem
-          v-for="product in products"
+          v-for="product in items"
           :key="product.id"
           :product="product"
         />
@@ -19,10 +19,10 @@
       <div class="v-menu">
         <div class="v-gender q-pb-lg">
           <q-list>
-            <q-item clickable @click="Filter" dense v-ripple>
+            <q-item clickable @click="Filter('sex', 'F')" dense v-ripple>
               <q-item-section class="text-weight-bold">Woman</q-item-section>
             </q-item>
-            <q-item clickable v-ripple>
+            <q-item clickable @click="Filter('sex','M')" v-ripple>
               <q-item-section>Man</q-item-section>
             </q-item>
             <q-item clickable v-ripple>
@@ -74,35 +74,46 @@ export default defineComponent({
   setup() {
     const apolloClient = new ApolloClient(getClientOptions());
     provideApolloClient(apolloClient);
+    const items = ref([]);
 
     const flag = ref(false);
-    const { result, loading, error } = useQuery(gql`
+    const { result, loading, error, onResult } = useQuery(gql`
       query MyQuery {
         products {
           id
           title
           price
           img
+          sex
         }
       }
     `);
+    const products = computed(() => result.value?.products ?? []);
 
-    const Filter = () => {
-      const { result, loading, error } = useQuery(gql`
-        query MyQuery {
-          products(where: { sex: { _eq: "F" } }) {
-            id
-            img
-            price
-            title
-          }
-        }
-      `);
-      console.log(result.value);
+    onResult(() => {
+      console.log(products.value);
+      products.value.forEach((item) => {
+        items.value.push(item);
+      });
+    });
+
+    const Filter = (arg, param) => {
+      switch (arg) {
+        case "sex":
+          items.value = products.value.filter((item) => item.sex == param);
+          break;
+        case "size":
+          items.value = items.value.filter((item) => item.size == param);
+          break;
+        default:
+          items.value = products.value;
+      }
+
+      console.log(items.value);
+      return items;
     };
 
-    const products = computed(() => result.value?.products ?? []);
-    return { products, loading, error, Filter };
+    return { items, products, loading, error, Filter };
   },
 });
 </script>
