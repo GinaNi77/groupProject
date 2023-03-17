@@ -19,7 +19,7 @@
       <div class="v-menu">
         <div class="v-gender q-pb-lg">
           <q-list>
-            <q-item clickable dense v-ripple>
+            <q-item clickable @click="Filter" dense v-ripple>
               <q-item-section class="text-weight-bold">Woman</q-item-section>
             </q-item>
             <q-item clickable v-ripple>
@@ -60,6 +60,10 @@ import { computed } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
+import { getClientOptions } from "src/apollo/index.js";
+import { provideApolloClient } from "@vue/apollo-composable";
+import { ApolloClient } from "@apollo/client/core";
+
 export default defineComponent({
   name: "v-catalog",
 
@@ -68,6 +72,9 @@ export default defineComponent({
   },
 
   setup() {
+    const apolloClient = new ApolloClient(getClientOptions());
+    provideApolloClient(apolloClient);
+
     const flag = ref(false);
     const { result, loading, error } = useQuery(gql`
       query MyQuery {
@@ -80,9 +87,22 @@ export default defineComponent({
       }
     `);
 
-    const products = computed(() => result.value?.products ?? []);
+    const Filter = () => {
+      const { result, loading, error } = useQuery(gql`
+        query MyQuery {
+          products(where: { sex: { _eq: "F" } }) {
+            id
+            img
+            price
+            title
+          }
+        }
+      `);
+      console.log(result.value);
+    };
 
-    return { products, loading, error };
+    const products = computed(() => result.value?.products ?? []);
+    return { products, loading, error, Filter };
   },
 });
 </script>
