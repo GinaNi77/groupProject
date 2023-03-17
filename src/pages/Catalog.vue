@@ -19,10 +19,10 @@
       <div class="v-menu">
         <div class="v-gender q-pb-lg">
           <q-list>
-            <q-item clickable @click="Filter('sex', 'F')" dense v-ripple>
+            <q-item clickable @click="Filter()" dense v-ripple>
               <q-item-section class="text-weight-bold">Woman</q-item-section>
             </q-item>
-            <q-item clickable @click="Filter('sex','M')" v-ripple>
+            <q-item clickable @click="Filter('sex', 'M')" v-ripple>
               <q-item-section>Man</q-item-section>
             </q-item>
             <q-item clickable v-ripple>
@@ -97,20 +97,40 @@ export default defineComponent({
       });
     });
 
-    const Filter = (arg, param) => {
-      switch (arg) {
-        case "sex":
-          items.value = products.value.filter((item) => item.sex == param);
-          break;
-        case "size":
-          items.value = items.value.filter((item) => item.size == param);
-          break;
-        default:
-          items.value = products.value;
-      }
+    // const Filter = (arg, param) => {
+    //   switch (arg) {
+    //     case "sex":
+    //       items.value = products.value.filter((item) => item.sex == param);
+    //       break;
+    //     case "size":
+    //       items.value = items.value.filter((item) => item.size == param);
+    //       break;
+    //     default:
+    //       items.value = products.value;
+    //   }
 
-      console.log(items.value);
-      return items;
+    //   console.log(items.value);
+    //   return items;
+    // };
+
+    const Filter = () => {
+      const { result, loading, error, onResult } = useQuery(gql`
+        query MyQuery {
+          products(where: { sex: { _eq: "F" } }) {
+            id
+            img
+            price
+            title
+            sex
+            size
+          }
+        }
+      `);
+
+      onResult(() => {
+        console.log(result.value.products);
+        items.value = result.value.products;
+      });
     };
 
     return { items, products, loading, error, Filter };
