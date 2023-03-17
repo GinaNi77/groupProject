@@ -1,13 +1,21 @@
 <template>
   <q-page class="flex justify-center q-px-xl">
     <div class="v-catalog flex flex-start">
-      <vCatalogItem v-for="item in items" :key="item.id" />
+      <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">Loading...</div>
+      <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">Error: {{error.message}}</div>
+
+      <vCatalogItem 
+      v-else-if="products"
+      v-for="product in products"
+      :key="product.id"
+      :product="product"/>
+      
     </div>
     <div class="v-menu">
       <div class="v-gender q-pb-lg">
-        <q-list class="text-weight-bold">
-          <q-item clickable v-ripple>
-            <q-item-section>Woman</q-item-section>
+        <q-list>
+          <q-item clickable dense v-ripple >
+            <q-item-section class="text-weight-bold">Woman</q-item-section>
           </q-item>
           <q-item clickable v-ripple>
             <q-item-section>Man</q-item-section>
@@ -17,6 +25,7 @@
           </q-item>
         </q-list>
       </div>
+
       <div class="v-attr q-pt-lg">
         <q-list>
           <q-item clickable v-ripple>
@@ -37,23 +46,39 @@
   </q-page>
 </template>
 
-<script setup>
-import vCatalogItem from "../components/v-catalog-item.vue";
+<script>
+import vCatalogItem from 'src/components/CatalogItem.vue';
 
-const items = [
-  {
-    id: 1,
+import { defineComponent, ref } from 'vue'
+import { computed } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+
+export default defineComponent ({
+  name: "v-catalog",
+
+  components: {
+        vCatalogItem
+    },
+
+  setup() {
+    const flag = ref(false)
+    const {result, loading, error} = useQuery(gql`
+        query MyQuery {
+          products {
+            id
+            title
+            price
+            img
+      }
+      }`)
+
+    const products = computed(() => result.value?.products ?? [])
+
+    return {products, loading, error};
   },
-  {
-    id: 3,
-  },
-  {
-    id: 4,
-  },
-  {
-    id: 5,
-  },
-];
+})
+
 </script>
 
 <style scoped>
