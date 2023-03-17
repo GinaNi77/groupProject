@@ -14,7 +14,7 @@
     label="Delete all"
     icon="delete"
   />
-  <!-- <p class="text-h5 text-weight-bold text-center">TOTAL: ${{}}</p> -->
+  <p class="text-h5 text-weight-bold text-center">TOTAL: ${{ totalPrice }}</p>
   <q-btn
     v-if="cart.length"
     to="/payment"
@@ -44,7 +44,7 @@ export default defineComponent({
           id: 1,
           image: "vest.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
+          color: "Navy Blue",
           size: "",
           units: 1,
           amount: 24,
@@ -54,7 +54,7 @@ export default defineComponent({
           id: 2,
           image: "blouse.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
+          color: "Navy Blue",
           size: "",
           units: 1,
           amount: 24,
@@ -64,7 +64,7 @@ export default defineComponent({
           id: 3,
           image: "boots.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
+          color: "Navy Blue",
           size: "",
           units: 1,
           amount: 24,
@@ -74,7 +74,7 @@ export default defineComponent({
           id: 4,
           image: "shirt.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
-          colour: "Navy Blue",
+          color: "Navy Blue",
           size: "",
           units: 1,
           amount: 24,
@@ -91,15 +91,15 @@ export default defineComponent({
       this.cart.splice(0, this.cart.length);
     },
   },
-  // computed: {
-  //   totalPrice() {
-  //     let totalPrice = 0;
-  //     for (let i = 0; i < this.cart.length; i++) {
-  //       totalPrice += this.cart.amount[i];
-  //     }
-  //     return totalPrice;
-  //   },
-  // },
+  computed: {
+    totalPrice() {
+      let totalPrice = 0;
+      for (let i = 0; i < this.cart.length; i++) {
+        totalPrice += this.cart[i].amount * this.cart[i].units;
+      }
+      return totalPrice;
+    },
+  },
 });
 </script>
 
