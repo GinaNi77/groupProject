@@ -9,14 +9,6 @@
         <div class="text-weight-light text-caption">{{ product.title }}</div>
         <div class="text-weight-bold">{{ product.price }}</div>
 
-        <!-- <q-btn class="flat q-mb-sm text-black full-width" 
-        size="sm" 
-        :ripple="false" 
-        flat
-        >
-        learn more
-      </q-btn>
-
       <q-btn class="flat full-width" 
         outline 
         @click="loadData(product.id)">
@@ -40,6 +32,9 @@ export default defineComponent({
         return {};
       },
     },
+    productId:{
+      type: Number,
+    }
   },
 
   setup() {
