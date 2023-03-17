@@ -6,8 +6,8 @@
       :src="require('../assets/images/' + cart.image)"
     />
     <div>
-      <p>{{ cart.description }}</p>
-      <p>{{ cart.ref }}</p>
+      <p style="max-width: 179px">{{ cart.description }}</p>
+      <p style="opacity: 0.5; font-size: 10px">REF. {{ cart.ref }}</p>
     </div>
     <p>{{ cart.colour }}</p>
     <q-select
@@ -17,12 +17,12 @@
       label="Size"
       style="width: 110px; height: 52px"
     />
-    <div class="flex">
-      <q-btn flat @click="increment()" label="+" />
+    <div class="flex justify-center column" style="width: 132px; height: 52px">
+      <q-btn style="width: 9px" flat @click="increment()" label="+" />
       <input
         v-model="cart.units"
         class="text-center no-border"
-        style="width: 132px; height: 52px"
+        style="max-width: 40px"
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
@@ -54,9 +54,12 @@ export default defineComponent({
     increment() {
       this.cart.units++;
     },
-    decrement() {
+    decrement(index) {
       if (this.cart.units > 0) {
         this.cart.units--;
+        if (this.cart.units === 0) {
+          this.$emit("deleteFromCart", index);
+        }
       }
     },
     deleteFromCart(index) {
