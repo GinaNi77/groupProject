@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+const options = ['XS','S','M','L','XL','XXL']
 const product = {
   id: 1,
   image: "../assets/images/vest.svg",
