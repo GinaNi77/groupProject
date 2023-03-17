@@ -1,5 +1,5 @@
 <template>
-  <div class="q-ma-md flex flex-center cart-item">
+  <div class="q-ma-md q-mx-auto flex flex-center cart-item" style="max-width:1140px">
     <q-img
       style="width: 130px; height: 200px"
       alt="Picture"
@@ -9,7 +9,7 @@
       <p style="max-width: 179px">{{ cart.description }}</p>
       <p style="opacity: 0.5; font-size: 10px">REF. {{ cart.ref }}</p>
     </div>
-    <p>{{ cart.colour }}</p>
+    <p>{{ cart.color }}</p>
     <q-select
       filled
       v-model="sizeBtn"
@@ -72,6 +72,7 @@ export default defineComponent({
 
 <style lang="scss">
 .cart-item {
-  gap: 100px;
+  // gap: 100px;
+  justify-content: space-around;
 }
 </style>
