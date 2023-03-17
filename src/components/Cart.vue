@@ -14,7 +14,7 @@
     label="Delete all"
     icon="delete"
   />
-  <!-- <p class="text-h5 text-weight-bold text-center">TOTAL: ${{}}</p> -->
+  <p class="text-h5 text-weight-bold text-center">TOTAL: ${{ totalPrice }}</p>
   <q-btn
     v-if="cart.length"
     to="/payment"
@@ -91,15 +91,15 @@ export default defineComponent({
       this.cart.splice(0, this.cart.length);
     },
   },
-  // computed: {
-  //   totalPrice() {
-  //     let totalPrice = 0;
-  //     for (let i = 0; i < this.cart.length; i++) {
-  //       totalPrice += this.cart.amount[i];
-  //     }
-  //     return totalPrice;
-  //   },
-  // },
+  computed: {
+    totalPrice() {
+      let totalPrice = 0;
+      for (let i = 0; i < this.cart.length; i++) {
+        totalPrice += this.cart[i].amount * this.cart[i].units;
+      }
+      return totalPrice;
+    },
+  },
 });
 </script>
 
