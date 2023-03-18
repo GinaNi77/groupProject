@@ -54,7 +54,7 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <keep-alive>
+        <keep-alive exclude="product-card">
           <component :is="Component" />
         </keep-alive>
       </router-view>

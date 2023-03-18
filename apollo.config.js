@@ -5,7 +5,7 @@ module.exports = {
   client: {
     service: {
       name: 'my-service',
-      url: 'http://localhost:3000/graphql',
+      url: 'https://perfect-doberman-24.hasura.app/v1/graphql',
     },
     // Files processed by the extension
     includes: ['src/**/*.vue', 'src/**/*.js', 'src/**/*.ts'],
