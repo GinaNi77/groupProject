@@ -25,8 +25,8 @@
             <q-item clickable @click="Filter('M')" v-ripple>
               <q-item-section>Man</q-item-section>
             </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Kids</q-item-section>
+            <q-item clickable @click="GetAll()" v-ripple>
+              <q-item-section>All</q-item-section>
             </q-item>
           </q-list>
         </div>
@@ -77,7 +77,7 @@ export default defineComponent({
     const items = ref([]);
 
     const flag = ref(false);
-    const { result, loading, error, onResult } = useQuery(gql`
+    const { result, loading, error, onResult, refetch } = useQuery(gql`
       query MyQuery {
         products {
           id
@@ -91,9 +91,7 @@ export default defineComponent({
     const products = computed(() => result.value?.products ?? []);
 
     onResult(() => {
-      products.value.forEach((item) => {
-        items.value.push(item);
-      });
+      items.value = result.value.products;
     });
 
     // const Filter = (arg, param) => {
@@ -139,7 +137,28 @@ export default defineComponent({
       return items;
     };
 
-    return { items, products, loading, error, Filter };
+    const GetAll = () => {
+      const { result, loading, error, onResult, refetch } = useQuery(gql`
+        query MyQuery {
+          products {
+            id
+            title
+            price
+            img
+            sex
+          }
+        }
+      `);
+
+      onResult(() => {
+        items.value = result.value.products;
+      });
+
+      refetch();
+      return items;
+    };
+
+    return { items, products, loading, error, Filter, refetch, GetAll };
   },
 });
 </script>
