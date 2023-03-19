@@ -23,10 +23,10 @@
               v-model="gender"
               checked-icon="horizontal_rule xs"
               unchecked-icon="none"
-              val="Woman"
+              val="F"
               label="Woman"
               @click="FilterGender('F')"
-              :class="{ 'text-weight-bold': gender == 'Woman' }"
+              :class="{ 'text-weight-bold': gender == 'F' }"
           /></q-item>
 
           <q-item tag="label" v-ripple>
@@ -34,10 +34,10 @@
               v-model="gender"
               checked-icon="horizontal_rule xs"
               unchecked-icon="none"
-              val="Man"
+              val="M"
               label="Man"
               @click="FilterGender('M')"
-              :class="{ 'text-weight-bold': gender == 'Man' }"
+              :class="{ 'text-weight-bold': gender == 'M' }"
             />
           </q-item>
 
@@ -57,7 +57,7 @@
 
         <div class="v-attr q-pt-lg">
           <q-list>
-            <q-item clickable v-ripple>
+            <q-item clickable @click="ChooseSize()" v-ripple>
               <q-item-section>Size</q-item-section>
               <q-item-section avatar>
                 <q-icon color="primary" size="xs" name="add" />
@@ -80,7 +80,6 @@
 import vCatalogItem from "src/components/CatalogItem.vue";
 
 import { defineComponent, ref } from "vue";
-import { computed } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
@@ -99,6 +98,7 @@ export default defineComponent({
     const apolloClient = new ApolloClient(getClientOptions());
     provideApolloClient(apolloClient);
     const products = ref([]);
+    const gender = ref("All");
 
     const flag = ref(false);
 
@@ -145,6 +145,66 @@ export default defineComponent({
       return products;
     };
 
+    const FilterSize = (size) => {
+      const { result, refetch, onResult } = useQuery(
+        gql`
+          query MyQuery($param: String) {
+            products(where: { size: { _eq: $param } }) {
+              id
+              img
+              price
+              title
+              sex
+              size
+            }
+          }
+        `,
+        {
+          param: size,
+        }
+      );
+
+      onResult(() => {
+        products.value = result.value.products;
+      });
+
+      refetch();
+      return products;
+    };
+
+    const FilterGenderSize = (gender, size) => {
+      const { result, refetch, onResult } = useQuery(
+        gql`
+          query MyQuery($sizeParam: String, $sexParam: String) {
+            products(
+              where: {
+                size: { _eq: $sizeParam }
+                _and: { sex: { _eq: $sexParam } }
+              }
+            ) {
+              id
+              size
+              sex
+              img
+              title
+              price
+            }
+          }
+        `,
+        {
+          sizeParam: size,
+          sexParam: gender,
+        }
+      );
+
+      onResult(() => {
+        products.value = result.value.products;
+      });
+
+      refetch();
+      return products;
+    };
+
     const GetAll = () => {
       const { result, onResult, refetch } = useQuery(gql`
         query MyQuery {
@@ -166,13 +226,43 @@ export default defineComponent({
       return products;
     };
 
+    function ChooseSize() {
+      this.$q
+        .dialog({
+          title: "Size",
+          message: "Choose a size:",
+          options: {
+            type: "radio",
+            model: "size",
+            inline: true,
+            items: [
+              { label: "XS", value: "XS" },
+              { label: "S", value: "S" },
+              { label: "M", value: "M" },
+              { label: "L", value: "L" },
+              { label: "XL", value: "XL" },
+              { label: "XXL", value: "XXL" },
+            ],
+          },
+          cancel: true,
+          persistent: true,
+        })
+        .onOk((data) => {
+          console.log(gender.value, data);
+          gender.value != "All"
+            ? FilterGenderSize(gender.value, data)
+            : FilterSize(data);
+        });
+    }
+
     return {
       products,
       loading,
       error,
-      gender: ref("All"),
+      gender,
       FilterGender,
       GetAll,
+      ChooseSize,
     };
   },
 });
