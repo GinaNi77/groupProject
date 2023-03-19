@@ -1,5 +1,42 @@
 <template>
   <q-page>
+    <div class="flex justify-center" v-if="windowWitdh < 1100">
+      <q-item>
+        <q-radio
+          v-model="gender"
+          checked-icon="arrow_right"
+          unchecked-icon="none"
+          val="F"
+          label="Woman"
+          @click="FilterGender('F')"
+          :class="{ 'text-weight-bold': gender == 'F' }"
+      /></q-item>
+
+      <q-item>
+        <q-radio
+          v-model="gender"
+          checked-icon="arrow_right"
+          unchecked-icon="none"
+          val="M"
+          label="Man"
+          @click="FilterGender('M')"
+          :class="{ 'text-weight-bold': gender == 'M' }"
+        />
+      </q-item>
+
+      <q-item>
+        <q-radio
+          v-model="gender"
+          checked-icon="arrow_right"
+          unchecked-icon="none"
+          val="All"
+          label="All"
+          @click="GetAll()"
+          :class="{ 'text-weight-bold': gender == 'All' }"
+        />
+      </q-item>
+    </div>
+
     <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
       Loading...
     </div>
@@ -8,15 +45,21 @@
     </div>
 
     <div class="flex justify-center q-mt-lg" v-else-if="products">
-      <div class="v-catalog flex flex-start">
-        <vCatalogItem
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
-        />
+      <div class="v-catalog">
+        <div class="flex justify-center" v-if="products.length">
+          <vCatalogItem
+            v-for="product in products"
+            :key="product.id"
+            :product="product"
+          />
+        </div>
+        <div class="flex justify-center" v-else>
+          We are sorry, nothing was found
+          <q-icon size="sm" name="sentiment_very_dissatisfied" />
+        </div>
       </div>
 
-      <div class="v-menu">
+      <div class="v-menu" v-if="windowWitdh > 1100">
         <div class="v-gender q-pb-lg">
           <q-item tag="label" v-ripple>
             <q-radio
@@ -63,12 +106,6 @@
                 <q-icon color="primary" size="xs" name="add" />
               </q-item-section>
             </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Price</q-item-section>
-              <q-item-section avatar>
-                <q-icon color="primary" size="xs" name="add" />
-              </q-item-section>
-            </q-item>
           </q-list>
         </div>
       </div>
@@ -99,8 +136,7 @@ export default defineComponent({
     provideApolloClient(apolloClient);
     const products = ref([]);
     const gender = ref("All");
-
-    const flag = ref(false);
+    const windowWitdh = ref(document.documentElement.clientWidth);
 
     const { result, loading, error, onResult } = useQuery(gql`
       query MyQuery {
@@ -233,7 +269,6 @@ export default defineComponent({
           message: "Choose a size:",
           options: {
             type: "radio",
-            model: "size",
             inline: true,
             items: [
               { label: "XS", value: "XS" },
@@ -248,18 +283,25 @@ export default defineComponent({
           persistent: true,
         })
         .onOk((data) => {
-          console.log(gender.value, data);
-          gender.value != "All"
-            ? FilterGenderSize(gender.value, data)
-            : FilterSize(data);
+          if (data) {
+            gender.value != "All"
+              ? FilterGenderSize(gender.value, data)
+              : FilterSize(data);
+          }
         });
     }
+
+    window.addEventListener("resize", () => {
+      windowWitdh.value = document.documentElement.clientWidth;
+      console.log(windowWitdh.value);
+    });
 
     return {
       products,
       loading,
       error,
       gender,
+      windowWitdh,
       FilterGender,
       GetAll,
       ChooseSize,
@@ -271,6 +313,7 @@ export default defineComponent({
 <style scoped>
 .v-catalog {
   max-width: 830px;
+  width: 100%;
 }
 .v-menu {
   max-width: 250px;
