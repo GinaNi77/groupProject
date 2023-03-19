@@ -40,11 +40,42 @@
 <script>
 import CartItem from "../components/CartItem.vue";
 import { defineComponent, ref } from "vue";
+import { computed } from "vue";
+import { useQuery } from "@vue/apollo-composable";
+import gql from "graphql-tag";
 
 export default defineComponent({
   name: "Cart",
   components: {
     CartItem,
+  },
+  setup(){
+
+  
+
+    const { result, loading, error, onResult, refetch } = useQuery(gql`
+    query MyQuery {
+    carts {
+    id
+    product_id
+      product {
+        color
+        description
+        id
+        img
+        price
+        sex
+        size
+        title
+      }
+  }
+}`)
+
+console.log(result)
+return{
+  loading, error, result
+}
+
   },
   data() {
     return {

@@ -73,7 +73,7 @@ export default defineComponent({
 
       const products = computed(() => result.value?.products ?? [])
 
-      console.log(productId.value)
+   
 
       const { mutate: addToCart } = useMutation(gql`
       mutation addProductToCart ($product_id: Int){
