@@ -10,7 +10,7 @@
     <div class="flex justify-center q-mt-lg" v-else-if="products">
       <div class="v-catalog flex flex-start">
         <vCatalogItem
-          v-for="product in items"
+          v-for="product in products"
           :key="product.id"
           :product="product"
         />
@@ -18,17 +18,41 @@
 
       <div class="v-menu">
         <div class="v-gender q-pb-lg">
-          <q-list>
-            <q-item clickable @click="Filter('F')" dense v-ripple>
-              <q-item-section class="text-weight-bold">Woman</q-item-section>
-            </q-item>
-            <q-item clickable @click="Filter('M')" v-ripple>
-              <q-item-section>Man</q-item-section>
-            </q-item>
-            <q-item clickable @click="GetAll()" v-ripple>
-              <q-item-section>All</q-item-section>
-            </q-item>
-          </q-list>
+          <q-item tag="label" v-ripple>
+            <q-radio
+              v-model="gender"
+              checked-icon="horizontal_rule xs"
+              unchecked-icon="none"
+              val="Woman"
+              label="Woman"
+              @click="FilterGender('F')"
+              :class="{ 'text-weight-bold': gender == 'Woman' }"
+          /></q-item>
+
+          <q-item tag="label" v-ripple>
+            <q-radio
+              v-model="gender"
+              checked-icon="horizontal_rule xs"
+              unchecked-icon="none"
+              val="Man"
+              label="Man"
+              @click="FilterGender('M')"
+              :class="{ 'text-weight-bold': gender == 'Man' }"
+            />
+          </q-item>
+
+          <q-item tag="label" v-ripple>
+            <q-radio
+              v-model="gender"
+              aria-checked="text-weight-bold"
+              checked-icon="horizontal_rule xs"
+              unchecked-icon="none"
+              val="All"
+              label="All"
+              @click="GetAll()"
+              :class="{ 'text-weight-bold': gender == 'All' }"
+            />
+          </q-item>
         </div>
 
         <div class="v-attr q-pt-lg">
@@ -74,10 +98,11 @@ export default defineComponent({
   setup() {
     const apolloClient = new ApolloClient(getClientOptions());
     provideApolloClient(apolloClient);
-    const items = ref([]);
+    const products = ref([]);
 
     const flag = ref(false);
-    const { result, loading, error, onResult, refetch } = useQuery(gql`
+
+    const { result, loading, error, onResult } = useQuery(gql`
       query MyQuery {
         products {
           id
@@ -88,29 +113,12 @@ export default defineComponent({
         }
       }
     `);
-    const products = computed(() => result.value?.products ?? []);
 
     onResult(() => {
-      items.value = result.value.products;
+      products.value = result.value.products;
     });
 
-    // const Filter = (arg, param) => {
-    //   switch (arg) {
-    //     case "sex":
-    //       items.value = products.value.filter((item) => item.sex == param);
-    //       break;
-    //     case "size":
-    //       items.value = items.value.filter((item) => item.size == param);
-    //       break;
-    //     default:
-    //       items.value = products.value;
-    //   }
-
-    //   console.log(items.value);
-    //   return items;
-    // };
-
-    const Filter = (sex) => {
+    const FilterGender = (sex) => {
       const { result, refetch, onResult } = useQuery(
         gql`
           query MyQuery($param: String) {
@@ -130,15 +138,15 @@ export default defineComponent({
       );
 
       onResult(() => {
-        items.value = result.value.products;
+        products.value = result.value.products;
       });
 
       refetch();
-      return items;
+      return products;
     };
 
     const GetAll = () => {
-      const { result, loading, error, onResult, refetch } = useQuery(gql`
+      const { result, onResult, refetch } = useQuery(gql`
         query MyQuery {
           products {
             id
@@ -151,14 +159,21 @@ export default defineComponent({
       `);
 
       onResult(() => {
-        items.value = result.value.products;
+        products.value = result.value.products;
       });
 
       refetch();
-      return items;
+      return products;
     };
 
-    return { items, products, loading, error, Filter, refetch, GetAll };
+    return {
+      products,
+      loading,
+      error,
+      gender: ref("All"),
+      FilterGender,
+      GetAll,
+    };
   },
 });
 </script>
