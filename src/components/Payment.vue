@@ -7,23 +7,26 @@
         class="q-gutter-md"
         style="max-width: 200px"
       >
+        <q-input filled v-model="order.name" label="Name" />
+        <q-input filled v-model="order.surname" label="Surname" />
+        <q-input filled v-model="order.patronymic" label="Patronymic" />
         <q-input
           filled
-          v-model="card"
+          v-model="order.card"
           label="Card"
           mask="#### #### #### ####"
           fill-mask="_"
         />
         <q-input
           filled
-          v-model="date"
+          v-model="order.date"
           label="Date"
           mask="##/####"
           fill-mask="_"
         />
         <q-input
           filled
-          v-model="code"
+          v-model="order.code"
           label="CVV code"
           mask="###"
           fill-mask="_"
@@ -53,9 +56,15 @@ export default {
   name: "Payment",
   data() {
     return {
-      date: ref(null),
-      card: ref(null),
-      code: ref(null),
+      order: {
+        name: "",
+        surname: "",
+        patronymic: "",
+        date: null,
+        card: null,
+        code: null,
+      },
+
       accept: ref(false),
       $q: useQuasar(),
     };
@@ -76,9 +85,7 @@ export default {
           icon: "cloud_done",
           message: "Submitted",
         });
-        console.log(
-          `card: ${this.card}, date: ${this.date}, code: ${this.code}`
-        );
+        console.log(this.order);
       }
     },
 
