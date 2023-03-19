@@ -1,31 +1,40 @@
 <template>
-  <p class="text-h4 text-weight-bold text-center">SHOPPING CART</p>
-  <CartItem
-    v-for="(item, index) in cart"
-    :key="item.id"
-    :cart="item"
-    @deleteFromCart="deleteFromCart(index)"
-  />
-  <q-btn
-    v-if="cart.length"
-    class="q-ma-md"
-    @click="deleteAllFromCart"
-    flat
-    label="Delete all"
-    icon="delete"
-  />
-  <p class="text-h5 text-weight-bold text-center">TOTAL: ${{ totalPrice }}</p>
-  <q-btn
-    v-if="cart.length"
-    to="/payment"
-    class="q-my-md q-mx-auto"
-    label="Checkout now"
-  />
-  <div v-if="!cart.length" class="flex absolute-center column">
-    <q-icon name="shopping_cart" size="150px" color="primary" />
-    <div class="text-h4 text-primary">Your cart is empty...</div>
-    <q-btn class="q-ma-lg" to="/catalog" label="Back to Catalog" />
-  </div>
+  <q-page class="q-mx-auto" style="max-width: 1140px">
+    <p class="text-h4 text-weight-bold text-center">SHOPPING CART</p>
+    <CartItem
+      v-for="(item, index) in cart"
+      :key="item.id"
+      :cart="item"
+      @deleteFromCart="deleteFromCart(index)"
+    />
+    <div v-if="cart.length">
+      <div class="q-ma-md flex justify-end">
+        <q-btn
+          @click="deleteAllFromCart"
+          flat
+          label="Delete all"
+          icon="delete"
+        />
+      </div>
+      <p class="text-h5 text-weight-bold text-center">
+        TOTAL: ${{ totalPrice }}
+      </p>
+      <div class="flex flex-center q-mb-lg">
+        <q-btn to="/payment" label="Checkout now" />
+      </div>
+    </div>
+
+    <div v-if="!cart.length" class="flex absolute-center column">
+      <q-icon
+        class="q-mx-auto"
+        name="shopping_cart"
+        size="150px"
+        color="primary"
+      />
+      <div class="text-h4 text-primary">Your cart is empty...</div>
+      <q-btn class="q-ma-lg" to="/catalog" label="Back to Catalog" />
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -45,7 +54,7 @@ export default defineComponent({
           image: "vest.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           color: "Navy Blue",
-          size: "",
+          size: "M",
           units: 1,
           amount: 24,
           ref: "3123/619",
@@ -55,7 +64,7 @@ export default defineComponent({
           image: "blouse.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           color: "Navy Blue",
-          size: "",
+          size: "M",
           units: 1,
           amount: 24,
           ref: "3123/619",
@@ -65,7 +74,7 @@ export default defineComponent({
           image: "boots.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           color: "Navy Blue",
-          size: "",
+          size: "XL",
           units: 1,
           amount: 24,
           ref: "3123/619",
@@ -75,7 +84,7 @@ export default defineComponent({
           image: "shirt.svg",
           description: "WAISTCOAT WITH CONTRAST PIPING",
           color: "Navy Blue",
-          size: "",
+          size: "L",
           units: 1,
           amount: 24,
           ref: "3123/619",

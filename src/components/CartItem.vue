@@ -1,5 +1,8 @@
 <template>
-  <div class="q-ma-md q-mx-auto flex flex-center cart-item" style="max-width:1140px">
+  <div
+    class="q-ma-md q-mx-auto flex flex-center cart-item"
+    style="max-width: 1140px"
+  >
     <q-img
       style="width: 130px; height: 200px"
       alt="Picture"
@@ -9,14 +12,8 @@
       <p style="max-width: 179px">{{ cart.description }}</p>
       <p style="opacity: 0.5; font-size: 10px">REF. {{ cart.ref }}</p>
     </div>
-    <p>{{ cart.color }}</p>
-    <q-select
-      filled
-      v-model="sizeBtn"
-      :options="options"
-      label="Size"
-      style="width: 110px; height: 52px"
-    />
+    <p class="q-my-auto">{{ cart.color }}</p>
+    <p class="q-my-auto">{{ cart.size }}</p>
     <div class="flex justify-center column" style="width: 132px; height: 52px">
       <q-btn style="width: 9px" flat @click="increment()" label="+" />
       <input
@@ -26,7 +23,7 @@
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
-    <p>${{ cart.amount * cart.units }}</p>
+    <p class="q-my-auto">${{ cart.amount * cart.units }}</p>
     <q-btn @click="deleteFromCart(index)" flat icon="delete" />
   </div>
 </template>
@@ -45,10 +42,7 @@ export default defineComponent({
     },
   },
   data() {
-    return {
-      sizeBtn: ref(null),
-      options: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
-    };
+    return {};
   },
   methods: {
     increment() {
