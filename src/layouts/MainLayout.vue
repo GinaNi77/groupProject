@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="bg-white">
+    <q-header class="bg-black">
       <q-toolbar>
         <q-btn
           flat
@@ -9,10 +9,16 @@
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
-          class="text-black"
+          class="text-white"
         />
 
-        <q-toolbar-title class="text-black uppercase"> Menu </q-toolbar-title>
+        <q-toolbar-title class="text-white uppercase"> Menu </q-toolbar-title>
+
+        <q-item id="user-button"></q-item>
+        <q-item id="auth-links" dense>
+          <q-btn flat @click="SignIn" class="tex-white">Login</q-btn>
+        </q-item>
+        
       </q-toolbar>
     </q-header>
 
@@ -25,13 +31,13 @@
     >
       <q-scroll-area class="fit">
         <q-list padding class="menu-list">
-          <q-item to="/" exact clickable v-ripple>
+          <!-- <q-item to="/" exact clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="login" />
             </q-item-section>
 
             <q-item-section> Login </q-item-section>
-          </q-item>
+          </q-item> -->
 
           <q-item to="/catalog" exact clickable v-ripple>
             <q-item-section avatar>
@@ -54,7 +60,7 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <keep-alive>
+        <keep-alive exclude="product-card">
           <component :is="Component" />
         </keep-alive>
       </router-view>
@@ -70,8 +76,13 @@ export default defineComponent({
   setup() {
     const leftDrawerOpen = ref(false);
 
+    const SignIn = () => {
+      window.Clerk.openSignIn();
+    };
+
     return {
       leftDrawerOpen,
+      SignIn,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },

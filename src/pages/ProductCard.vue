@@ -1,10 +1,4 @@
 <template>
-    <!-- <div class="text-h2">New Page</div>
-    <div>{{productId}}</div>
-    <div v-for="product in products" :key="product.id">
-        <div>{{product.title}}</div>    
-    </div> -->
-
     <q-page class="flex justify-center q-pa-xl">
     <div class="v-product flex justify-around" v-for="product in products" :key="product.id">
       <div class="v-product-image">
@@ -57,8 +51,6 @@ export default defineComponent({
          
         const productId = ref(parseInt(route.params.id))
 
-        console.log(productId.value)
-
         const {result, error} = useQuery(gql`
         query MyQuery ($id: Int){
           products (where: {id: {_eq: $id}}){
@@ -75,6 +67,7 @@ export default defineComponent({
                 id: productId.value,         
             }
     )
+
       const products = computed(() => result.value?.products ?? [])
         
         return{
@@ -93,7 +86,4 @@ export default defineComponent({
 .v-product-about {
   max-width: 400px;
 }
-
-
-
 </style>

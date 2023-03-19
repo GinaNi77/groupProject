@@ -1,14 +1,34 @@
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { setContext } from "@apollo/client/link/context";
 export /* async */ function getClientOptions(/* {app, router, ...} */ options) {
+  const httpLink = createHttpLink({
+    uri:
+      process.env.GRAPHQL_URI ||
+      // Change to your graphql endpoint.
+      "https://perfect-doberman-24.hasura.app/v1/graphql",
+  });
+  const authLink = setContext((_, { headers }) => {
+    const token = sessionStorage.getItem("token");
+    if (token === "") {
+      return {
+        headers: {
+          ...headers,
+        },
+      };
+    } else {
+      return {
+        headers: {
+          ...headers,
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    }
+  });
+
   return Object.assign(
     // General options.
     {
-      link: createHttpLink({
-        uri:
-          process.env.GRAPHQL_URI ||
-          // Change to your graphql endpoint.
-          'https://perfect-doberman-24.hasura.app/v1/graphql',
-      }),
+      link: authLink.concat(httpLink),
       cache: new InMemoryCache(),
     },
     // Specific Quasar mode options.
