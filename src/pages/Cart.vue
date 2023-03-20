@@ -6,17 +6,17 @@
     <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
       Error: {{ error.message }}
     </div>
-    <div v-else-if="cart">
-      <div v-if="cart.length">
+    <div v-else-if="carts">
+      <div v-if="carts.length">
         <CartItem
-          v-for="(item, index) in cart"
+          v-for="(item, index) in items"
           :key="item.id"
-          :cart="item"
-          @deleteFromCart="deleteFromCart(index)"
+          :carts="item"
+          @deleteFromCarts="deleteFromCarts(index)"
         />
         <div class="q-ma-md flex justify-end">
           <q-btn
-            @click="deleteAllFromCart"
+            @click="deleteAllFromCarts"
             flat
             label="Delete all"
             icon="delete"
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <div v-if="!cart.length" class="flex absolute-center column">
+      <div v-if="!carts.length" class="flex absolute-center column">
         <q-icon
           class="q-mx-auto"
           name="shopping_cart"
@@ -78,14 +78,13 @@ export default defineComponent({
         }
       }
     `);
-    const cart = computed(() => result.value?.cart ?? []);
+    const carts = computed(() => result.value?.carts ?? []);
 
     onResult(() => {
-      items.value = result.value.cart;
+      items.value = result.value.carts;
     });
-    console.log(result);
-    console.log(cart);
-    return { result, items, cart, loading, error };
+    
+    return { result, items, carts, loading, error };
   },
   data() {
     return {
@@ -134,18 +133,18 @@ export default defineComponent({
     };
   },
   methods: {
-    deleteFromCart(index) {
-      this.cart.splice(index, 1);
+    deleteFromCarts(index) {
+      this.carts.splice(index, 1);
     },
-    deleteAllFromCart() {
-      this.cart.splice(0, this.cart.length);
+    deleteAllFromCarts() {
+      this.carts.splice(0, this.carts.length);
     },
   },
   computed: {
     totalPrice() {
       let totalPrice = 0;
-      for (let i = 0; i < this.cart.length; i++) {
-        totalPrice += this.cart[i].amount * this.cart[i].units;
+      for (let i = 0; i < this.carts.length; i++) {
+        totalPrice += this.carts[i].amount * this.carts[i].units;
       }
       return totalPrice;
     },
