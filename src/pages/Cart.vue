@@ -9,12 +9,12 @@
     <div v-else-if="carts">
       <div v-if="carts.length">
         <!-- <CartItem
-          v-for="(item, index) in items"
+          v-for="(item, index) in carts"
           :key="item.id"
           :carts="item"
           @deleteFromCarts="deleteFromCarts(index)"
         /> -->
-        <div class="q-ma-md flex justify-end">
+        <!-- <div class="q-ma-md flex justify-end">
           <q-btn
             @click="deleteAllFromCarts"
             flat
@@ -27,7 +27,7 @@
         </p>
         <div class="flex flex-center q-mb-lg">
           <q-btn to="/payment" label="Checkout now" />
-        </div>
+        </div> -->
       </div>
 
       <div v-if="!carts.length" class="flex absolute-center column">
@@ -50,7 +50,6 @@ import { defineComponent, ref } from "vue";
 
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
-import { computed } from "vue";
 
 export default defineComponent({
   name: "Cart",
@@ -58,52 +57,56 @@ export default defineComponent({
     CartItem,
   },
   setup() {
-    const items = ref([]);
+    const carts = ref([]);
 
     const { result, loading, error, onResult } = useQuery(gql`
       query MyQuery {
         carts {
           id
-          product_id
           product {
             color
             description
             id
             img
             price
-            sex
             size
             title
+            sex
           }
+          product_id
         }
       }
     `);
-    const carts = computed(() => result.value?.carts ?? []);
-
     onResult(() => {
-      items.value = result.value.carts;
+      carts.value = result.value.carts;
     });
-    console.log(result);
+    console.log(carts);
 
-    return { result, items, carts, loading, error };
+    return { result, carts, loading, error };
   },
-  methods: {
-    deleteFromCarts(index) {
-      this.carts.splice(index, 1);
-    },
-    deleteAllFromCarts() {
-      this.carts.splice(0, this.carts.length);
-    },
-  },
-  computed: {
-    totalPrice() {
-      let totalPrice = 0;
-      for (let i = 0; i < this.carts.length; i++) {
-        totalPrice += this.carts[i].amount * this.carts[i].units;
-      }
-      return totalPrice;
-    },
-  },
+  // methods: {
+
+  // удаление товара из корзины
+  //   deleteFromCarts(index) {
+  //     this.carts.splice(index, 1);
+  //   },
+
+  // очистка корзины
+  //   deleteAllFromCarts() {
+  //     this.carts.splice(0, this.carts.length);
+  //   },
+  // },
+  // computed: {
+
+  // общая цена корзины
+  //   totalPrice() {
+  //     let totalPrice = 0;
+  //     for (let i = 0; i < this.carts.length; i++) {
+  //       totalPrice += this.carts[i].amount * this.carts[i].units;
+  //     }
+  //     return totalPrice;
+  //   },
+  // },
 });
 </script>
 
