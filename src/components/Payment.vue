@@ -7,9 +7,6 @@
         class="q-gutter-md"
         style="max-width: 200px"
       >
-        <q-input filled v-model="order.name" label="Name" />
-        <q-input filled v-model="order.surname" label="Surname" />
-        <q-input filled v-model="order.patronymic" label="Patronymic" />
         <q-input
           filled
           v-model="order.card"
@@ -57,9 +54,6 @@ export default {
   data() {
     return {
       order: {
-        name: "",
-        surname: "",
-        patronymic: "",
         date: null,
         card: null,
         code: null,
