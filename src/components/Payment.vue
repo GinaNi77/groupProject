@@ -1,97 +1,77 @@
 <template>
-  <div class="q-pa-md absolute-center" style="max-width: 300px">
-    <div class="q-gutter-md">
-      <q-form
-        @submit="onSubmit"
-        @reset="onReset"
-        class="q-gutter-md"
-        style="max-width: 200px"
-      >
+  <q-page padding>
+    <q-form class="row justify-center" @submit.prevent="addToOrder()">
+      <p class="col-12 text-h5 text-center">Checkout</p>
+      <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-lg">
         <q-input
-          filled
-          v-model="order.card"
-          label="Card"
+          label="card"
           mask="#### #### #### ####"
           fill-mask="_"
+          v-model="form.card"
         />
+
+        <q-input label="code" mask="###" fill-mask="_" v-model="form.code" />
+
         <q-input
-          filled
-          v-model="order.date"
-          label="Date"
+          label="date"
           mask="##/####"
           fill-mask="_"
+          v-model="form.date"
         />
-        <q-input
-          filled
-          v-model="order.code"
-          label="CVV code"
-          mask="###"
-          fill-mask="_"
-        />
-        <q-toggle v-model="accept" label="I accept the license and terms" />
 
-        <div>
-          <q-btn label="Submit" type="submit" color="primary" />
+        <div class="q-mt-xl">
           <q-btn
-            label="Reset"
-            type="reset"
-            color="primary"
-            flat
-            class="q-ml-sm"
+            outline
+            size="md"
+            color="black"
+            label="Submit"
+            class="full-width"
+            type="submit"
           />
         </div>
-      </q-form>
-    </div>
-  </div>
+      </div>
+    </q-form>
+  </q-page>
 </template>
 
 <script>
-import { ref } from "vue";
-import { useQuasar } from "quasar";
+import { defineComponent, ref } from "vue";
+import gql from "graphql-tag";
+import { useMutation } from "@vue/apollo-composable";
 
-export default {
+export default defineComponent({
   name: "Payment",
-  data() {
-    return {
-      order: {
-        date: null,
-        card: null,
-        code: null,
-      },
+  setup() {
+    const form = ref({
+      card: "",
+      code: "",
+      date: "",
+    });
 
-      accept: ref(false),
-      $q: useQuasar(),
+    const { mutate: addToOrder } = useMutation(
+      gql`
+        mutation MyMutation($card: String, $date: String, $code: String) {
+          insert_order_one(object: { card: $card, date: $date, code: $code }) {
+            id
+            card
+            code
+            date
+          }
+        }
+      `,
+      () => ({
+        variables: {
+          card: form.value.card,
+          code: form.value.code,
+          date: form.value.date,
+        },
+      })
+    );
+
+    return {
+      form,
+      addToOrder,
     };
   },
-  methods: {
-    onSubmit() {
-      if (this.accept !== true) {
-        this.$q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
-          message: "You need to accept the license and terms first",
-        });
-      } else {
-        this.$q.notify({
-          color: "green-4",
-          textColor: "white",
-          icon: "cloud_done",
-          message: "Submitted",
-        });
-        console.log(this.order);
-      }
-    },
-
-    onReset() {
-      this.date = null;
-      this.card = null;
-      this.code = null;
-      this.accept = false;
-    },
-  },
-};
+});
 </script>
-
-<style>
-</style>
