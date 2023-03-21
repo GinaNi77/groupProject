@@ -2,17 +2,11 @@
   <div
     class="q-ma-md q-mx-auto flex flex-center cart-item"
     style="max-width: 1140px"
-    v-for="item in carts"
+    v-for="item in item"
     :key="item.id"
   >
-    <q-img
-      style="width: 130px; height: 200px"
-      alt="Picture"
-      :src="require('../assets/images/' + item.image)"
-    />
     <div>
       <p style="max-width: 179px">{{ item.description }}</p>
-      <p style="opacity: 0.5; font-size: 10px">REF. {{ item.ref }}</p>
     </div>
     <p class="q-my-auto">{{ item.color }}</p>
     <p class="q-my-auto">{{ item.size }}</p>
@@ -39,36 +33,10 @@ import gql from "graphql-tag";
 
 export default defineComponent({
   name: "CartItem",
-  setup() {
-    const { result, error } = useQuery(
-      gql`
-        query MyQuery {
-          carts {
-            id
-            product {
-              color
-              description
-              id
-              img
-              price
-              size
-              title
-            }
-            product_id
-          }
-        }
-      `
-    );
-
-    const carts = computed(() => result.value?.carts ?? []);
-
-    console.log(carts);
-
-    return {
-      carts,
-      result,
-      error,
-    };
+  props: {
+    item: {
+      type: Object,
+    },
   },
   // methods: {
 

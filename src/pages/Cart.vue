@@ -8,12 +8,7 @@
     </div>
     <div v-else-if="carts">
       <div v-if="carts.length">
-        <!-- <CartItem
-          v-for="(item, index) in carts"
-          :key="item.id"
-          :carts="item"
-          @deleteFromCarts="deleteFromCarts(index)"
-        /> -->
+        <CartItem v-for="item in items" :key="item.id" :item="item" />
         <!-- <div class="q-ma-md flex justify-end">
           <q-btn
             @click="deleteAllFromCarts"
@@ -47,6 +42,7 @@
 <script>
 import CartItem from "../components/CartItem.vue";
 import { defineComponent, ref } from "vue";
+import { computed } from "vue";
 
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
@@ -57,7 +53,7 @@ export default defineComponent({
     CartItem,
   },
   setup() {
-    const carts = ref([]);
+    const items = ref([]);
 
     const { result, loading, error, onResult } = useQuery(gql`
       query MyQuery {
@@ -77,12 +73,14 @@ export default defineComponent({
         }
       }
     `);
+    const carts = computed(() => result.value?.carts ?? []);
+
     onResult(() => {
-      carts.value = result.value.carts;
+      items.value = result.value.carts;
     });
     console.log(carts);
 
-    return { result, carts, loading, error };
+    return { result, items, carts, loading, error };
   },
   // methods: {
 
