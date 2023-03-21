@@ -54,6 +54,15 @@
 
             <q-item-section> Cart </q-item-section>
           </q-item>
+
+          <q-item to="/chat" exact clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="chat" />
+            </q-item-section>
+
+            <q-item-section> Chat </q-item-section>
+          </q-item>
+
         </q-list>
       </q-scroll-area>
     </q-drawer>
