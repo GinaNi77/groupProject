@@ -2,25 +2,28 @@
   <div
     class="q-ma-md q-mx-auto flex flex-center cart-item"
     style="max-width: 1140px"
-    v-for="item in item"
-    :key="item.id"
   >
+    <q-img
+      style="width: 130px; height: 200px"
+      alt="Picture"
+      :src="require(`../assets/images/` + item.product.img)"
+    />
     <div>
-      <p style="max-width: 179px">{{ item.description }}</p>
+      <p style="max-width: 179px">{{ item.product.description }}</p>
     </div>
-    <p class="q-my-auto">{{ item.color }}</p>
-    <p class="q-my-auto">{{ item.size }}</p>
-    <!-- <div class="flex justify-center column" style="width: 132px; height: 52px">
-      <q-btn style="width: 9px" flat @click="increment()" label="+" />
+    <p class="q-my-auto">{{ item.product.color }}</p>
+    <p class="q-my-auto">{{ item.product.size }}</p>
+    <div class="flex justify-center column" style="width: 132px; height: 52px">
+      <q-btn style="width: 9px" flat @click="increment(units)" label="+" />
       <input
-        v-model="carts.units"
+        v-model="units"
         class="text-center no-border"
         style="max-width: 40px"
       />
       <q-btn flat @click="decrement()" label="-" />
-    </div> -->
-    <!-- <p class="q-my-auto">${{ item.amount * item.units }}</p> -->
-    <!-- <q-btn @click="deleteFromCart(index)" flat icon="delete" /> -->
+    </div>
+    <p class="q-my-auto">${{ item.product.price * units }}</p>
+    <q-btn @click="deleteFromCart(index)" flat icon="delete" />
   </div>
 </template>
 
@@ -38,26 +41,24 @@ export default defineComponent({
       type: Object,
     },
   },
-  // methods: {
-
-  // изменение количества товара
-  //   increment() {
-  //     this.cart.units++;
-  //   },
-  //   decrement(index) {
-  //     if (this.cart.units > 0) {
-  //       this.cart.units--;
-  //       if (this.cart.units === 0) {
-  //         this.$emit("deleteFromCart", index);
-  //       }
-  //     }
-  //   },
-
-  // удаление из корзины
-  //   deleteFromCart(index) {
-  //     this.$emit("deleteFromCart", index);
-  //   },
-  // },
+  setup(context) {
+    const units = ref(1);
+    const increment = () => {
+      units.value++;
+    };
+    const decrement = () => {
+      if (units.value > 0) {
+        units.value--;
+        if (units.value === 0) {
+          context.emit("deleteFromCart", index);
+        }
+      }
+    };
+    const deleteFromCart = (index) => {
+      context.emit("deleteFromCart", index);
+    };
+    return { units, increment, decrement, deleteFromCart };
+  },
 });
 </script>
 
