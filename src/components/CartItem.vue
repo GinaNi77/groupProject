@@ -14,7 +14,7 @@
     <p class="q-my-auto">{{ item.product.color }}</p>
     <p class="q-my-auto">{{ item.product.size }}</p>
     <div class="flex justify-center column" style="width: 132px; height: 52px">
-      <q-btn style="width: 9px" flat @click="increment(units)" label="+" />
+      <q-btn style="width: 9px" flat @click="increment()" label="+" />
       <input
         v-model="units"
         class="text-center no-border"
@@ -22,15 +22,15 @@
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
-    <p class="q-my-auto">${{ item.product.price * units }}</p>
-    <q-btn @click="deleteFromCart(index)" flat icon="delete" />
+    <p class="q-my-auto">${{ item.product.price * item.units }}</p>
+    <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, onUpdated } from "vue";
 import { computed } from "vue";
-import { useQuery } from "@vue/apollo-composable";
+import { useQuery, useMutation } from "@vue/apollo-composable";
 
 import gql from "graphql-tag";
 
@@ -41,23 +41,43 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup(context) {
+  setup() {
+    // const increment = () => {};
+
+    // const { result } = useQuery(gql`
+    //   query MyQuery {
+    //     carts {
+    //       units
+    //     }
+    //   }
+    // `);
+
     const units = ref(1);
     const increment = () => {
       units.value++;
     };
-    const decrement = () => {
-      if (units.value > 0) {
-        units.value--;
-        if (units.value === 0) {
-          context.emit("deleteFromCart", index);
+
+    const { mutate: deleteCartItem } = useMutation(gql`
+      mutation MyMutation($id: Int!) {
+        delete_carts_by_pk(id: $id) {
+          id
         }
       }
+    `);
+
+    const decrement = () => {
+      if (units.value > 1) {
+        units.value--;
+      }
     };
-    const deleteFromCart = (index) => {
-      context.emit("deleteFromCart", index);
+
+    const deleteFromCart = async (id) => {
+      const { data } = await deleteCartItem({
+        id: id,
+      });
+      console.log(id);
     };
-    return { units, increment, decrement, deleteFromCart };
+    return { increment, decrement, deleteCartItem, deleteFromCart, units };
   },
 });
 </script>
