@@ -28,6 +28,7 @@
               no-caps
               icon-right="add"
               label="Add to cart"
+              @click="addToCart()"
             />
           </div>
         </div>
@@ -41,6 +42,7 @@ import { defineComponent, ref, onUpdated } from 'vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
+import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export default defineComponent({
@@ -50,6 +52,7 @@ export default defineComponent({
         const route = useRoute()
          
         const productId = ref(parseInt(route.params.id))
+        console.log(productId.value)
 
         const {result, error} = useQuery(gql`
         query MyQuery ($id: Int){
@@ -69,11 +72,25 @@ export default defineComponent({
     )
 
       const products = computed(() => result.value?.products ?? [])
+
+   
+
+      const { mutate: addToCart } = useMutation(gql`
+      mutation addProductToCart ($product_id: Int){
+        insert_carts_one(object: {product_id: $product_id}) {
+        id
+        product_id
+      }
+        }`, () => ({
+        variables: {
+            product_id: productId.value,
+         },
+    }))
         
         return{
-            productId, route, products, error
+            productId, route, products, error, addToCart
         }
-    },
+    }
 })
 </script>
 
