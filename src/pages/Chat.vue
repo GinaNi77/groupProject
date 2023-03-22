@@ -35,13 +35,13 @@ export default defineComponent({
 
         const onConnect = function() {
             console.log("connect")
-            client.subscribe('/queue/web-stomp-test', function (message) {
+            client.subscribe('/exchange/web-stomp-test', function (message) {
             msgs.value.push(JSON.parse(message.body))
             console.log('Received message: ' + msgs.value)})
         }
 
         const sendMsg = function () {
-            client.send('/queue/web-stomp-test', { "content-type": "text/plain" }, JSON.stringify(msg.value));
+            client.send('/exchange/web-stomp-test', { "content-type": "text/plain" }, JSON.stringify(msg.value));
             msg.value = ""
         }
 
