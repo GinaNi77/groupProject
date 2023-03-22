@@ -2,13 +2,9 @@
     <q-page>
         <div  class="column items-center q-pa-xl">
         <div class="q-pa-md" style="width: 50%">
-            <div style="width: 100%; max-width: 400px">
-                <q-chat-message
-                    :text="['hey, how are you?']"
-                    sent
-                />
-                <q-chat-message
-                    :text="['doing fine, how r you?']"
+            <div style="width: 100%; max-width: 400px" >
+                <q-chat-message v-for="message in msgs" :key="message.index"
+                    :text="[message]"
                 />
             </div>
         </div>
@@ -35,14 +31,17 @@ export default defineComponent({
 
         const msg = ref("")
 
-       
+        const msgs = ref([])
 
-        function onConnect() {
-            console.log("connect")    
+        const onConnect = function() {
+            console.log("connect")
+            client.subscribe('/queue/web-stomp-test', function (message) {
+            msgs.value.push(JSON.parse(message.body))
+            console.log('Received message: ' + msgs.value)})
         }
 
-        const sendMsg = function (){
-            client.send('/queue/web-stomp-test', { "content-type": "text/plain" }, msg.value);
+        const sendMsg = function () {
+            client.send('/queue/web-stomp-test', { "content-type": "text/plain" }, JSON.stringify(msg.value));
             msg.value = ""
         }
 
@@ -53,7 +52,7 @@ export default defineComponent({
         client.connect("guest", "guest", onConnect, onError);
         
         return{
-            msg, sendMsg, ws, client
+            msg, sendMsg, ws, client, msgs
         }
     },
 })
