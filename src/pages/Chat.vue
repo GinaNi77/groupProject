@@ -4,7 +4,8 @@
         <div class="q-pa-md" style="width: 50%">
             <div style="width: 100%; max-width: 400px" >
                 <q-chat-message v-for="message in msgs" :key="message.index"
-                    :text="[message]"
+                    :text="[message.text]"
+                    :sent="checkSent(message)"
                 />
             </div>
         </div>
@@ -33,6 +34,12 @@ export default defineComponent({
 
         const msgs = ref([])
 
+        const user = window.Clerk.user
+
+        const checkSent = (message) => {
+            return message.user_id === user.id;
+        };
+
         const onConnect = function() {
             console.log("connect")
             client.subscribe('/exchange/web-stomp-test', function (message) {
@@ -41,7 +48,7 @@ export default defineComponent({
         }
 
         const sendMsg = function () {
-            client.send('/exchange/web-stomp-test', { "content-type": "text/plain" }, JSON.stringify(msg.value));
+            client.send('/exchange/web-stomp-test', { "content-type": "text/plain" }, JSON.stringify({text: msg.value, user_id: user.id}));
             msg.value = ""
         }
 
@@ -52,7 +59,7 @@ export default defineComponent({
         client.connect("guest", "guest", onConnect, onError);
         
         return{
-            msg, sendMsg, ws, client, msgs
+            msg, sendMsg, ws, client, msgs, user, checkSent
         }
     },
 })
