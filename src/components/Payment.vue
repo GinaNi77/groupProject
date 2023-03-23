@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
-    <q-form class="row justify-center" @submit.prevent="addToOrder()">
-      <p class="col-12 text-h5 text-center">Checkout</p>
+    <q-form class="row justify-center" @submit.prevent="add()">
+      <p class="col-12 text-h5 text-center text-weight-bold">CHECKOUT</p>
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-lg">
         <q-input
           label="card"
@@ -68,9 +68,20 @@ export default defineComponent({
       })
     );
 
+    const add = async () => {
+      const { data } = await addToOrder();
+      resetForm();
+    };
+
+    const resetForm = () => {
+      (form.value.card = ""), (form.value.code = ""), (form.value.date = "");
+    };
+
     return {
       form,
       addToOrder,
+      resetForm,
+      add,
     };
   },
 });
