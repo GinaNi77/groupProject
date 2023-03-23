@@ -18,7 +18,6 @@
         <q-item id="auth-links" dense>
           <q-btn flat @click="SignIn" class="tex-white">Login</q-btn>
         </q-item>
-        
       </q-toolbar>
     </q-header>
 
@@ -30,14 +29,6 @@
     >
       <q-scroll-area class="fit">
         <q-list padding class="menu-list">
-          <!-- <q-item to="/" exact clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="login" />
-            </q-item-section>
-
-            <q-item-section> Login </q-item-section>
-          </q-item> -->
-
           <q-item to="/catalog" exact clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="store" />

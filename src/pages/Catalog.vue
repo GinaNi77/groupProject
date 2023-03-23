@@ -1,121 +1,53 @@
 <template>
   <q-page>
-    <div class="flex" v-if="windowWitdh < 1100">
-      <q-item>
-        <q-radio
-          v-model="gender"
-          checked-icon="arrow_right"
-          unchecked-icon="none"
-          val="F"
-          label="Woman"
-          @click="FilterGender('F')"
-          :class="{ 'text-weight-bold': gender == 'F' }"
-      /></q-item>
+    <div class="q-my-xl">
+      <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
+        Loading...
+      </div>
+      <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
+        Error: {{ error.message }}
+      </div>
 
-      <q-item>
-        <q-radio
-          v-model="gender"
-          checked-icon="arrow_right"
-          unchecked-icon="none"
-          val="M"
-          label="Man"
-          @click="FilterGender('M')"
-          :class="{ 'text-weight-bold': gender == 'M' }"
-        />
-      </q-item>
-
-      <q-item>
-        <q-radio
-          v-model="gender"
-          checked-icon="arrow_right"
-          unchecked-icon="none"
-          val="All"
-          label="All"
-          @click="GetAll()"
-          :class="{ 'text-weight-bold': gender == 'All' }"
-        />
-      </q-item>
-
-      <q-item>
-        <q-radio
-          checked-icon="add"
-          unchecked-icon="add"
-          label="Size"
-          @click="ChooseSize()"
-        />
-      </q-item>
-    </div>
-
-    <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
-      Loading...
-    </div>
-    <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
-      Error: {{ error.message }}
-    </div>
-
-    <div class="flex justify-center q-mt-lg" v-else-if="products">
-      <div class="v-catalog">
-        <div class="flex justify-center" v-if="products.length">
+      <div class="flex justify-center q-mt-lg" v-else-if="products">
+        <div class="v-catalog flex flex-start">
           <vCatalogItem
-            v-for="product in products"
+            v-for="product in items"
             :key="product.id"
             :product="product"
           />
         </div>
-        <div class="flex justify-center" v-else>
-          We are sorry, nothing was found
-          <q-icon size="sm" name="sentiment_very_dissatisfied" />
-        </div>
-      </div>
 
-      <div class="v-menu" v-if="windowWitdh > 1100">
-        <div class="v-gender q-pb-lg">
-          <q-item tag="label" v-ripple>
-            <q-radio
-              v-model="gender"
-              checked-icon="horizontal_rule xs"
-              unchecked-icon="none"
-              val="F"
-              label="Woman"
-              @click="FilterGender('F')"
-              :class="{ 'text-weight-bold': gender == 'F' }"
-          /></q-item>
+        <div class="v-menu">
+          <div class="v-gender q-pb-lg">
+            <q-list>
+              <q-item clickable @click="Filter('F')" dense v-ripple>
+                <q-item-section class="text-weight-bold">Woman</q-item-section>
+              </q-item>
+              <q-item clickable @click="Filter('M')" v-ripple>
+                <q-item-section>Man</q-item-section>
+              </q-item>
+              <q-item clickable @click="GetAll()" v-ripple>
+                <q-item-section>All</q-item-section>
+              </q-item>
+            </q-list>
+          </div>
 
-          <q-item tag="label" v-ripple>
-            <q-radio
-              v-model="gender"
-              checked-icon="horizontal_rule xs"
-              unchecked-icon="none"
-              val="M"
-              label="Man"
-              @click="FilterGender('M')"
-              :class="{ 'text-weight-bold': gender == 'M' }"
-            />
-          </q-item>
-
-          <q-item tag="label" v-ripple>
-            <q-radio
-              v-model="gender"
-              aria-checked="text-weight-bold"
-              checked-icon="horizontal_rule xs"
-              unchecked-icon="none"
-              val="All"
-              label="All"
-              @click="GetAll()"
-              :class="{ 'text-weight-bold': gender == 'All' }"
-            />
-          </q-item>
-        </div>
-
-        <div class="v-attr q-pt-lg">
-          <q-list>
-            <q-item clickable @click="ChooseSize()" v-ripple>
-              <q-item-section>Size</q-item-section>
-              <q-item-section avatar>
-                <q-icon color="primary" size="xs" name="add" />
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <div class="v-attr q-pt-lg">
+            <q-list>
+              <q-item clickable v-ripple>
+                <q-item-section>Size</q-item-section>
+                <q-item-section avatar>
+                  <q-icon color="primary" size="xs" name="add" />
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-ripple>
+                <q-item-section>Price</q-item-section>
+                <q-item-section avatar>
+                  <q-icon color="primary" size="xs" name="add" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
         </div>
       </div>
     </div>
@@ -147,7 +79,7 @@ export default defineComponent({
     const gender = ref("All");
     const windowWitdh = ref(document.documentElement.clientWidth);
 
-    const { result, loading, error, onResult } = useQuery(gql`
+    const { result, loading, error, onResult, refetch } = useQuery(gql`
       query MyQuery {
         products {
           id
@@ -163,7 +95,7 @@ export default defineComponent({
       products.value = result.value.products;
     });
 
-    const FilterGender = (sex) => {
+    const Filter = (sex) => {
       const { result, refetch, onResult } = useQuery(
         gql`
           query MyQuery($param: String) {
