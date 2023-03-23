@@ -23,9 +23,8 @@
           <q-btn
             outline
             size="md"
-            color="black"
             label="Submit"
-            class="full-width"
+            class="full-width bg-black text-white"
             type="submit"
           />
         </div>
