@@ -39,7 +39,7 @@
               no-caps
               icon-right="add"
               label="Add to cart"
-              @click="addToCart()"
+              @click="add()"
             />
           </div>
         </div>
@@ -62,7 +62,7 @@ export default defineComponent({
 
   setup() {
     const route = useRoute();
-
+    const productsInCart = ref([]);
     const productId = ref(parseInt(route.params.id));
 
     const { result, error } = useQuery(
@@ -87,7 +87,51 @@ export default defineComponent({
 
     const products = computed(() => result.value?.products ?? []);
 
-    const { mutate: addToCart } = useMutation(
+    const getCart = () => {
+      const { result, onResult, refetch } = useQuery(gql`
+        query MyQuery {
+          carts {
+            id
+            product {
+              color
+              description
+              id
+              img
+              price
+              size
+              title
+              sex
+            }
+            product_id
+          }
+        }
+      `);
+      const carts = computed(() => result.value?.carts ?? []);
+
+      onResult(() => {
+        productsInCart.value = [];
+        carts.value.forEach((cart) => {
+          productsInCart.value.push(cart.product_id);
+        });
+      });
+
+      refetch();
+      return productsInCart;
+    };
+
+    const add = () => {
+      console.log("Массив" + productsInCart.value); //*
+      if (!productsInCart.value.includes(productId.value)) {
+        addProductToCart();
+        productsInCart.value.push(productId.value);
+        console.log("Добавили" + productId.value); //*
+      } else {
+        changeUnits();
+        console.log("Такой уже есть"); //*
+      }
+    };
+
+    const { mutate: addProductToCart } = useMutation(
       gql`
         mutation addProductToCart($product_id: Int) {
           insert_carts_one(object: { product_id: $product_id }) {
@@ -103,12 +147,32 @@ export default defineComponent({
       })
     );
 
+    const { mutate: changeUnits } = useMutation(
+      gql`
+        mutation changeUnits($product_id: Int_comparison_exp) {
+          update_carts(_inc: { units: 1 }, where: { product_id: $product_id }) {
+            returning {
+              id
+              units
+            }
+          }
+        }
+      `,
+      () => ({
+        variables: {
+          product_id: { _eq: productId.value },
+        },
+      })
+    );
+
+    getCart();
+
     return {
       productId,
       route,
       products,
       error,
-      addToCart,
+      add,
     };
   },
 });

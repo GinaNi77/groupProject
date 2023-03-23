@@ -36,6 +36,13 @@
       <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
     </div>
   </div>
+  <q-btn
+    class="q-ma-md"
+    @click="deleteAllFromCart"
+    flat
+    label="Delete all"
+    icon="delete"
+  />
 </template>
 
 <script>
