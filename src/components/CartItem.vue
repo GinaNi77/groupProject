@@ -22,7 +22,7 @@
       />
       <q-btn flat @click="decrement()" label="-" />
     </div>
-    <p class="q-my-auto">${{ item.product.price * item.units }}</p>
+    <p class="q-my-auto">${{ item.product.price * units }}</p>
     <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
   </div>
 </template>
