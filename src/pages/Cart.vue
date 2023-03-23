@@ -16,13 +16,13 @@
             label="Delete all"
             icon="delete"
           />
-        </div>
-        <p class="text-h5 text-weight-bold text-center">
+        </div> -->
+        <!-- <p class="text-h5 text-weight-bold text-center">
           TOTAL: ${{ totalPrice }}
-        </p>
+        </p> -->
         <div class="flex flex-center q-mb-lg">
           <q-btn to="/payment" label="Checkout now" />
-        </div> -->
+        </div>
       </div>
 
       <div v-if="!carts.length" class="flex absolute-center column">
