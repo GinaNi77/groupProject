@@ -1,51 +1,53 @@
 <template>
   <q-page>
-    <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
-      Loading...
-    </div>
-    <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
-      Error: {{ error.message }}
-    </div>
-
-    <div class="flex justify-center q-mt-lg" v-else-if="products">
-      <div class="v-catalog flex flex-start">
-        <vCatalogItem
-          v-for="product in items"
-          :key="product.id"
-          :product="product"
-        />
+    <div class="q-my-xl">
+      <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
+        Loading...
+      </div>
+      <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
+        Error: {{ error.message }}
       </div>
 
-      <div class="v-menu">
-        <div class="v-gender q-pb-lg">
-          <q-list>
-            <q-item clickable @click="Filter('F')" dense v-ripple>
-              <q-item-section class="text-weight-bold">Woman</q-item-section>
-            </q-item>
-            <q-item clickable @click="Filter('M')" v-ripple>
-              <q-item-section>Man</q-item-section>
-            </q-item>
-            <q-item clickable @click="GetAll()" v-ripple>
-              <q-item-section>All</q-item-section>
-            </q-item>
-          </q-list>
+      <div class="flex justify-center q-mt-lg" v-else-if="products">
+        <div class="v-catalog flex flex-start">
+          <vCatalogItem
+            v-for="product in items"
+            :key="product.id"
+            :product="product"
+          />
         </div>
 
-        <div class="v-attr q-pt-lg">
-          <q-list>
-            <q-item clickable v-ripple>
-              <q-item-section>Size</q-item-section>
-              <q-item-section avatar>
-                <q-icon color="primary" size="xs" name="add" />
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Price</q-item-section>
-              <q-item-section avatar>
-                <q-icon color="primary" size="xs" name="add" />
-              </q-item-section>
-            </q-item>
-          </q-list>
+        <div class="v-menu">
+          <div class="v-gender q-pb-lg">
+            <q-list>
+              <q-item clickable @click="Filter('F')" dense v-ripple>
+                <q-item-section class="text-weight-bold">Woman</q-item-section>
+              </q-item>
+              <q-item clickable @click="Filter('M')" v-ripple>
+                <q-item-section>Man</q-item-section>
+              </q-item>
+              <q-item clickable @click="GetAll()" v-ripple>
+                <q-item-section>All</q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+
+          <div class="v-attr q-pt-lg">
+            <q-list>
+              <q-item clickable v-ripple>
+                <q-item-section>Size</q-item-section>
+                <q-item-section avatar>
+                  <q-icon color="primary" size="xs" name="add" />
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-ripple>
+                <q-item-section>Price</q-item-section>
+                <q-item-section avatar>
+                  <q-icon color="primary" size="xs" name="add" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
         </div>
       </div>
     </div>
@@ -76,7 +78,6 @@ export default defineComponent({
     provideApolloClient(apolloClient);
     const items = ref([]);
 
-    const flag = ref(false);
     const { result, loading, error, onResult, refetch } = useQuery(gql`
       query MyQuery {
         products {
@@ -93,22 +94,6 @@ export default defineComponent({
     onResult(() => {
       items.value = result.value.products;
     });
-
-    // const Filter = (arg, param) => {
-    //   switch (arg) {
-    //     case "sex":
-    //       items.value = products.value.filter((item) => item.sex == param);
-    //       break;
-    //     case "size":
-    //       items.value = items.value.filter((item) => item.size == param);
-    //       break;
-    //     default:
-    //       items.value = products.value;
-    //   }
-
-    //   console.log(items.value);
-    //   return items;
-    // };
 
     const Filter = (sex) => {
       const { result, refetch, onResult } = useQuery(
@@ -138,7 +123,7 @@ export default defineComponent({
     };
 
     const GetAll = () => {
-      const { result, loading, error, onResult, refetch } = useQuery(gql`
+      const { result, onResult, refetch } = useQuery(gql`
         query MyQuery {
           products {
             id

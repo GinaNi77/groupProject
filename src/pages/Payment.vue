@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import gql from "graphql-tag";
 import { useMutation } from "@vue/apollo-composable";
 
@@ -48,14 +48,29 @@ export default defineComponent({
       date: "",
     });
 
+    let localTotal;
+
     const { mutate: addToOrder } = useMutation(
       gql`
-        mutation MyMutation($card: String, $date: String, $code: String) {
-          insert_order_one(object: { card: $card, date: $date, code: $code }) {
+        mutation MyMutation(
+          $card: String
+          $date: String
+          $code: String
+          $order_price: Int
+        ) {
+          insert_order_one(
+            object: {
+              card: $card
+              date: $date
+              code: $code
+              order_price: $order_price
+            }
+          ) {
             id
             card
             code
             date
+            order_price
           }
         }
       `,
@@ -64,13 +79,20 @@ export default defineComponent({
           card: form.value.card,
           code: form.value.code,
           date: form.value.date,
+          order_price: localTotal,
         },
       })
     );
 
     const add = async () => {
+      getTotal();
       const { data } = await addToOrder();
       resetForm();
+    };
+
+    const getTotal = () => {
+      localTotal = JSON.parse(localStorage.getItem("localTotal"));
+      console.log(localTotal);
     };
 
     const resetForm = () => {
@@ -82,6 +104,9 @@ export default defineComponent({
       addToOrder,
       resetForm,
       add,
+      onMounted,
+      localTotal,
+      getTotal,
     };
   },
 });

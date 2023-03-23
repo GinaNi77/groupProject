@@ -24,7 +24,13 @@
           TOTAL: ${{ totalPrice() }}
         </p>
         <div class="flex flex-center q-mb-lg">
-          <q-btn to="/payment" label="Checkout now" />
+          <q-btn
+            flat
+            class="bg-black text-white"
+            size="md"
+            to="/payment"
+            label="Checkout now"
+          />
         </div>
       </div>
 
@@ -36,7 +42,11 @@
           color="primary"
         />
         <div class="text-h4 text-primary">Your cart is empty...</div>
-        <q-btn class="q-ma-lg" to="/catalog" label="Back to Catalog" />
+        <q-btn
+          class="q-ma-lg bg-black text-white"
+          to="/catalog"
+          label="Back to Catalog"
+        />
       </div>
     </div>
   </q-page>
@@ -44,8 +54,8 @@
 
 <script>
 import CartItem from "../components/CartItem.vue";
+
 import { defineComponent, ref } from "vue";
-import { computed } from "vue";
 
 import { useQuery, useMutation } from "@vue/apollo-composable";
 import gql from "graphql-tag";
@@ -91,7 +101,8 @@ export default defineComponent({
       for (let i = 0; i < items.value.length; i++) {
         total += items.value[i].product.price * items.value[i].units;
       }
-
+      let localTotal = total;
+      localStorage.setItem("localTotal", JSON.stringify(localTotal));
       return total;
     };
 

@@ -1,6 +1,13 @@
 <template>
   <q-page class="flex justify-center q-pa-xl">
+    <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
+      Loading...
+    </div>
+    <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
+      Error: {{ error.message }}
+    </div>
     <div
+      v-else-if="products"
       class="v-product flex justify-around"
       v-for="product in products"
       :key="product.id"
@@ -38,7 +45,7 @@
               stretch
               no-caps
               icon-right="add"
-              label="Add to cart"
+              label="ADD TO CART"
               @click="add()"
             />
           </div>
@@ -49,7 +56,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onUpdated } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useQuery } from "@vue/apollo-composable";
@@ -67,7 +74,7 @@ export default defineComponent({
     const productsInCart = ref([]);
     const productId = ref(parseInt(route.params.id));
 
-    const { result, error } = useQuery(
+    const { result, error, loading } = useQuery(
       gql`
         query MyQuery($id: Int) {
           products(where: { id: { _eq: $id } }) {
@@ -124,14 +131,11 @@ export default defineComponent({
     const $q = useQuasar();
 
     const add = () => {
-      console.log("Массив" + productsInCart.value); //*
       if (!productsInCart.value.includes(productId.value)) {
         addProductToCart();
         productsInCart.value.push(productId.value);
-        console.log("Добавили" + productId.value); //*
       } else {
         changeUnits();
-        console.log("Такой уже есть"); //*
       }
       $q.notify({
         message: "the product is added to the cart",
@@ -180,6 +184,7 @@ export default defineComponent({
       route,
       products,
       error,
+      loading,
       add,
     };
   },

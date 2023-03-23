@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, onUpdated, computed } from "vue";
-import { useQuery, useMutation } from "@vue/apollo-composable";
+import { defineComponent } from "vue";
+import { useMutation } from "@vue/apollo-composable";
 import { useQuasar } from "quasar";
 
 import gql from "graphql-tag";
