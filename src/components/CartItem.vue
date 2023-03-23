@@ -1,6 +1,6 @@
 <template>
   <div
-    class="q-ma-md q-mx-auto flex flex-center cart-item"
+    class="q-ma-md q-mx-xl flex flex-center cart-item"
     style="max-width: 1140px"
   >
     <q-img
@@ -8,26 +8,31 @@
       alt="Picture"
       :src="require(`../assets/images/` + item.product.img)"
     />
-    <div>
-      <p style="max-width: 179px">{{ item.product.description }}</p>
-    </div>
-    <p class="q-my-auto">{{ item.product.color }}</p>
-    <p class="q-my-auto">{{ item.product.size }}</p>
-    <div class="flex justify-center column" style="width: 132px; height: 52px">
-      <q-btn
-        style="width: 9px"
-        flat
-        @click="incrementItem(item.id)"
-        label="+"
-      />
-      <p class="text-center no-border" style="max-width: 40px">
-        {{ item.units }}
+    <div class="flex flex-center cart-item" style="width: 80%">
+      <p style="max-width: 179px" class="text-bold">
+        {{ item.product.title }}
       </p>
-      <q-btn flat @click="decrementItem(item.id, item.units)" label="-" />
-    </div>
-    <p class="q-my-auto">${{ item.product.price * item.units }}</p>
+      <p class="q-my-auto">{{ item.product.color }}</p>
+      <p class="q-my-auto">{{ item.product.size }}</p>
+      <div
+        class="flex justify-around"
+        style="width: 132px; height: 52px"
+      >
+        <q-btn
+          style="width: 5%"
+          flat
+          @click="incrementItem(item.id)"
+          label="+"
+        />
+        <p class="text-center no-border q-my-auto" style="max-width: 40px">
+          {{ item.units }}
+        </p>
+        <q-btn style="width: 5%" flat @click="decrementItem(item.id, item.units)" label="-" />
+      </div>
+      <p class="q-my-auto">${{ item.product.price * item.units }}</p>
 
-    <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
+      <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
+    </div>
   </div>
 </template>
 
@@ -101,6 +106,7 @@ export default defineComponent({
           id: id,
         });
       }
+      context.emit;
     };
 
     const deleteFromCart = async (id) => {
@@ -108,7 +114,7 @@ export default defineComponent({
         id: id,
       });
     };
-    
+
     return {
       increment,
       decrement,

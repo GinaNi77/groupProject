@@ -76,6 +76,13 @@ export default defineComponent({
     `);
     const carts = computed(() => result.value?.carts ?? []);
 
+    const totalPrice = () => {
+      let total = 0;
+      for (let i = 0; i < items.length; i++) {
+        
+      }
+    };
+
     onResult(() => {
       items.value = result.value.carts;
     });
