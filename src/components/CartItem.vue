@@ -14,15 +14,19 @@
     <p class="q-my-auto">{{ item.product.color }}</p>
     <p class="q-my-auto">{{ item.product.size }}</p>
     <div class="flex justify-center column" style="width: 132px; height: 52px">
-      <q-btn style="width: 9px" flat @click="increment()" label="+" />
-      <input
-        v-model="units"
-        class="text-center no-border"
-        style="max-width: 40px"
+      <q-btn
+        style="width: 9px"
+        flat
+        @click="incrementItem(item.id)"
+        label="+"
       />
-      <q-btn flat @click="decrement()" label="-" />
+      <p class="text-center no-border" style="max-width: 40px">
+        {{ item.units }}
+      </p>
+      <q-btn flat @click="decrementItem(item.id, item.units)" label="-" />
     </div>
-    <p class="q-my-auto">${{ item.product.price * units }}</p>
+    <p class="q-my-auto">${{ item.product.price * item.units }}</p>
+
     <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
   </div>
 </template>
@@ -52,10 +56,17 @@ export default defineComponent({
     //   }
     // `);
 
-    const units = ref(1);
-    const increment = () => {
-      units.value++;
-    };
+    // const units = ref(1);
+    const { mutate: increment } = useMutation(gql`
+      mutation MyMutation($id: Int!) {
+        update_carts(where: { id: { _eq: $id } }, _inc: { units: 1 }) {
+          returning {
+            units
+            id
+          }
+        }
+      }
+    `);
 
     const { mutate: deleteCartItem } = useMutation(gql`
       mutation MyMutation($id: Int!) {
@@ -65,9 +76,30 @@ export default defineComponent({
       }
     `);
 
-    const decrement = () => {
-      if (units.value > 1) {
-        units.value--;
+    const { mutate: decrement } = useMutation(gql`
+      mutation MyMutation($id: Int!) {
+        update_carts(where: { id: { _eq: $id } }, _inc: { units: -1 }) {
+          returning {
+            units
+            id
+          }
+        }
+      }
+    `);
+
+    const incrementItem = async (id) => {
+      const { data } = await increment({
+        id: id,
+      });
+    };
+
+    const decrementItem = async (id, units) => {
+      if (units < 2) {
+        deleteFromCart(id);
+      } else {
+        const { data } = await decrement({
+          id: id,
+        });
       }
     };
 
@@ -75,9 +107,16 @@ export default defineComponent({
       const { data } = await deleteCartItem({
         id: id,
       });
-      console.log(id);
     };
-    return { increment, decrement, deleteCartItem, deleteFromCart, units };
+    
+    return {
+      increment,
+      decrement,
+      deleteCartItem,
+      deleteFromCart,
+      incrementItem,
+      decrementItem,
+    };
   },
 });
 </script>
