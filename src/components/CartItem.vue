@@ -9,12 +9,12 @@
       :src="require(`../assets/images/` + item.product.img)"
     />
     <div class="flex flex-center cart-item" style="width: 80%">
-      <p style="max-width: 179px" class="text-bold">
+      <p style="width: 150px" class="text-bold">
         {{ item.product.title }}
       </p>
       <p class="q-my-auto">{{ item.product.color }}</p>
       <p class="q-my-auto">{{ item.product.size }}</p>
-      <div class="flex justify-around" style="width: 132px; height: 52px">
+      <div class="flex justify-around" style="width: 110px; height: 52px">
         <q-btn
           style="width: 5%"
           flat
@@ -31,7 +31,9 @@
           label="-"
         />
       </div>
-      <p class="q-my-auto">${{ item.product.price * item.units }}</p>
+      <p class="q-my-auto" style="width: 50px">
+        ${{ item.product.price * item.units }}
+      </p>
 
       <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
     </div>
