@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="flex justify-center" v-if="windowWitdh < 1100">
+    <div class="flex" v-if="windowWitdh < 1100">
       <q-item>
         <q-radio
           v-model="gender"
@@ -33,6 +33,15 @@
           label="All"
           @click="GetAll()"
           :class="{ 'text-weight-bold': gender == 'All' }"
+        />
+      </q-item>
+
+      <q-item>
+        <q-radio
+          checked-icon="add"
+          unchecked-icon="add"
+          label="Size"
+          @click="ChooseSize()"
         />
       </q-item>
     </div>
