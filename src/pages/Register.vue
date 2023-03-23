@@ -1,6 +1,6 @@
 <template>
     <q-page padding>
-        <q-form class="row justify-center" @submit.prevent="">
+        <q-form class="row justify-center" @submit.prevent="addUser()">
             <p class="col-12 text-h5 text-center">Register</p>
             <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-lg">
                 <q-input
@@ -28,6 +28,8 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import gql from 'graphql-tag'
+import { useMutation } from '@vue/apollo-composable'
 
 export default defineComponent({
   name: 'PageRegister',
@@ -38,8 +40,24 @@ export default defineComponent({
         password: ""
     })
 
+    const { mutate: addUser } = useMutation(gql`
+      mutation MyMutation ($name: String, $email:String, $password: String){
+      insert_users_one(object: {name: $name, email: $email, password: $password}) {
+        id
+        name
+        email
+        password
+    }
+    }`, () => ({
+        variables: {
+            name: form.value.name,
+            email: form.value.email,
+            password: form.value.password,
+         },
+    }))
+
     return{
-        form
+        form, addUser,
     }
   }
 })

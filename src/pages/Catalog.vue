@@ -1,51 +1,177 @@
 <template>
-  <q-page class="flex flex-start q-pt-xl">
-    <div class="v-catalog flex flex-start q-px-xl">
-      <vCatalogItem v-for="item in items" :key="item.id" />
+  <q-page>
+    <div class="text-h6 q-mr-xl flex flex-center" v-if="loading">
+      Loading...
     </div>
-    <div class="v-menu">
-      <div class="v-gender">
-        <ul>
-          <li>Woman</li>
-          <li>Man</li>
-          <li>Kids</li>
-        </ul>
+    <div class="text-h6 q-mr-xl flex flex-center" v-else-if="error">
+      Error: {{ error.message }}
+    </div>
+
+    <div class="flex justify-center q-mt-lg" v-else-if="products">
+      <div class="v-catalog flex flex-start">
+        <vCatalogItem
+          v-for="product in items"
+          :key="product.id"
+          :product="product"
+        />
       </div>
-      <div class="v-attr">
-        <ul>
-          <li>Size</li>
-          <li>Price</li>
-        </ul>
+
+      <div class="v-menu">
+        <div class="v-gender q-pb-lg">
+          <q-list>
+            <q-item clickable @click="Filter('F')" dense v-ripple>
+              <q-item-section class="text-weight-bold">Woman</q-item-section>
+            </q-item>
+            <q-item clickable @click="Filter('M')" v-ripple>
+              <q-item-section>Man</q-item-section>
+            </q-item>
+            <q-item clickable @click="GetAll()" v-ripple>
+              <q-item-section>All</q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+
+        <div class="v-attr q-pt-lg">
+          <q-list>
+            <q-item clickable v-ripple>
+              <q-item-section>Size</q-item-section>
+              <q-item-section avatar>
+                <q-icon color="primary" size="xs" name="add" />
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Price</q-item-section>
+              <q-item-section avatar>
+                <q-icon color="primary" size="xs" name="add" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
       </div>
     </div>
   </q-page>
 </template>
 
-<script setup>
-import vCatalogItem from "../components/v-catalog-item.vue";
+<script>
+import vCatalogItem from "src/components/CatalogItem.vue";
 
-const items = [
-  {
-    id: 1,
+import { defineComponent, ref } from "vue";
+import { computed } from "vue";
+import { useQuery } from "@vue/apollo-composable";
+import gql from "graphql-tag";
+
+import { getClientOptions } from "src/apollo/index.js";
+import { provideApolloClient } from "@vue/apollo-composable";
+import { ApolloClient } from "@apollo/client/core";
+
+export default defineComponent({
+  name: "v-catalog",
+
+  components: {
+    vCatalogItem,
   },
-  {
-    id: 3,
+
+  setup() {
+    const apolloClient = new ApolloClient(getClientOptions());
+    provideApolloClient(apolloClient);
+    const items = ref([]);
+
+    const flag = ref(false);
+    const { result, loading, error, onResult, refetch } = useQuery(gql`
+      query MyQuery {
+        products {
+          id
+          title
+          price
+          img
+          sex
+        }
+      }
+    `);
+    const products = computed(() => result.value?.products ?? []);
+
+    onResult(() => {
+      items.value = result.value.products;
+    });
+
+    // const Filter = (arg, param) => {
+    //   switch (arg) {
+    //     case "sex":
+    //       items.value = products.value.filter((item) => item.sex == param);
+    //       break;
+    //     case "size":
+    //       items.value = items.value.filter((item) => item.size == param);
+    //       break;
+    //     default:
+    //       items.value = products.value;
+    //   }
+
+    //   console.log(items.value);
+    //   return items;
+    // };
+
+    const Filter = (sex) => {
+      const { result, refetch, onResult } = useQuery(
+        gql`
+          query MyQuery($param: String) {
+            products(where: { sex: { _eq: $param } }) {
+              id
+              img
+              price
+              title
+              sex
+              size
+            }
+          }
+        `,
+        {
+          param: sex,
+        }
+      );
+
+      onResult(() => {
+        items.value = result.value.products;
+      });
+
+      refetch();
+      return items;
+    };
+
+    const GetAll = () => {
+      const { result, loading, error, onResult, refetch } = useQuery(gql`
+        query MyQuery {
+          products {
+            id
+            title
+            price
+            img
+            sex
+          }
+        }
+      `);
+
+      onResult(() => {
+        items.value = result.value.products;
+      });
+
+      refetch();
+      return items;
+    };
+
+    return { items, products, loading, error, Filter, refetch, GetAll };
   },
-  {
-    id: 4,
-  },
-  {
-    id: 5,
-  },
-];
+});
 </script>
 
 <style scoped>
 .v-catalog {
-  max-width: 900px;
+  max-width: 830px;
 }
 .v-menu {
-  max-width: 350px;
+  max-width: 250px;
   width: 100%;
+}
+.v-gender {
+  border-bottom: solid grey 1px;
 }
 </style>
