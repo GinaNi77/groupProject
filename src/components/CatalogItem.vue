@@ -8,13 +8,19 @@
       <q-card-section class="q-pa-xs">
         <div class="text-weight-light text-caption">{{ product.title }}</div>
         <div class="text-weight-bold">{{ product.price }}</div>
+
+      <!-- <q-btn class="flat full-width" 
+        outline 
+        @click="loadData(product.id)">
+        buy
+      </q-btn> -->
       </q-card-section>
     </q-card>
   </router-link>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "v-catalog-item",
@@ -26,9 +32,19 @@ export default defineComponent({
         return {};
       },
     },
-    productId: {
+    productId:{
       type: Number,
-    },
+    }
+  },
+
+  setup() {
+    const loadData = (id) => {
+      console.log(id);
+    };
+
+    return {
+      loadData,
+    };
   },
 });
 </script>

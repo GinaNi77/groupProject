@@ -30,7 +30,7 @@ onMounted(() => {
         userButton.style.margin = "0 15px";
         sessionStorage.setItem(
           "token",
-          await Clerk.session.getToken({ template: "Hasura" })
+          await Clerk.session.getToken({ template: "hasura" })
         );
       } else {
         sessionStorage.setItem("token", "");
