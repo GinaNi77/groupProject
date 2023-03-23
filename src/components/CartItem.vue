@@ -14,10 +14,7 @@
       </p>
       <p class="q-my-auto">{{ item.product.color }}</p>
       <p class="q-my-auto">{{ item.product.size }}</p>
-      <div
-        class="flex justify-around"
-        style="width: 132px; height: 52px"
-      >
+      <div class="flex justify-around" style="width: 132px; height: 52px">
         <q-btn
           style="width: 5%"
           flat
@@ -27,7 +24,12 @@
         <p class="text-center no-border q-my-auto" style="max-width: 40px">
           {{ item.units }}
         </p>
-        <q-btn style="width: 5%" flat @click="decrementItem(item.id, item.units)" label="-" />
+        <q-btn
+          style="width: 5%"
+          flat
+          @click="decrementItem(item.id, item.units)"
+          label="-"
+        />
       </div>
       <p class="q-my-auto">${{ item.product.price * item.units }}</p>
 
@@ -51,17 +53,6 @@ export default defineComponent({
     },
   },
   setup() {
-    // const increment = () => {};
-
-    // const { result } = useQuery(gql`
-    //   query MyQuery {
-    //     carts {
-    //       units
-    //     }
-    //   }
-    // `);
-
-    // const units = ref(1);
     const { mutate: increment } = useMutation(gql`
       mutation MyMutation($id: Int!) {
         update_carts(where: { id: { _eq: $id } }, _inc: { units: 1 }) {
@@ -106,7 +97,6 @@ export default defineComponent({
           id: id,
         });
       }
-      context.emit;
     };
 
     const deleteFromCart = async (id) => {
@@ -130,7 +120,6 @@ export default defineComponent({
 
 <style lang="scss">
 .cart-item {
-  // gap: 100px;
   justify-content: space-around;
 }
 </style>
