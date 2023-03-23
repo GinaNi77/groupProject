@@ -8,6 +8,9 @@
     </div>
     <div v-else-if="items">
       <div v-if="items.length">
+        <p class="text-h5 q-my-lg text-weight-bold text-center">
+          SHOPPING CART
+        </p>
         <CartItem v-for="item in items" :key="item.id" :item="item" />
         <div class="q-ma-md flex justify-end">
           <q-btn
