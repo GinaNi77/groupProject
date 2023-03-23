@@ -20,9 +20,9 @@
             icon="delete"
           />
         </div>
-        <!-- <p class="text-h5 text-weight-bold text-center">
+        <p class="text-h5 text-weight-bold text-center">
           TOTAL: ${{ totalPrice() }}
-        </p> -->
+        </p>
         <div class="flex flex-center q-mb-lg">
           <q-btn to="/payment" label="Checkout now" />
         </div>
@@ -87,12 +87,12 @@ export default defineComponent({
     `);
 
     const totalPrice = () => {
-      // let total = items.reduce();
-      // for (let i = 0; i < items.length; i++) {
-      //   total += items[i].value.price;
-      //   console.log('items[i].value.price');
-      // }
-      // return total;
+      let total = 0; // = items.value.reduce((total, items.value.product.price) => total + items.value.product.price, 0);
+      for (let i = 0; i < items.value.length; i++) {
+        total += items.value[i].product.price * items.value[i].units;
+      }
+
+      return total;
     };
 
     onResult(() => {
@@ -101,18 +101,6 @@ export default defineComponent({
 
     return { result, items, loading, error, totalPrice, deleteAllFromCarts };
   },
-
-  // общая цена корзины
-
-  // computed: {
-  //   totalPrice() {
-  //     let totalPrice = 0;
-  //     for (let i = 0; i < this.items.length; i++) {
-  //       totalPrice += this.items[i].amount * this.items[i].units;
-  //     }
-  //     return totalPrice;
-  //   },
-  // },
 });
 </script>
 
