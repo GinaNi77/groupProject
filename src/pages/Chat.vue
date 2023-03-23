@@ -1,8 +1,8 @@
 <template>
     <q-page>
         <div  class="column items-center q-pa-xl">
-        <div class="q-pa-md" style="width: 50%">
-            <div style="width: 100%; max-width: 400px" >
+        <div style="width: 600px">
+            <div style="width: 100%; max-width: 600px" class="">
                 <q-chat-message v-for="message in msgs" :key="message.index"
                     :text="[message.text]"
                     :sent="checkSent(message)"
