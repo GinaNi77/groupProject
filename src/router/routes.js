@@ -11,7 +11,7 @@ const routes = [
       { path: 'chat', component: () => import('pages/Chat.vue') },
       { path: 'product/:id', component: () => import('pages/ProductCard.vue') },
       { path: 'cart', component: () => import('src/pages/Cart.vue') },
-      { path: 'payment', component: () => import('components/Payment.vue') },
+      { path: 'payment', component: () => import('src/pages/Payment.vue') },
     ]
   },
 
