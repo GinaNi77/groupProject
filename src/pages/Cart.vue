@@ -96,7 +96,6 @@ export default defineComponent({
       items.value = result.value.carts;
     });
 
-    console.log(items);
     return { result, items, loading, error, totalPrice, deleteAllFromCarts };
   },
 

@@ -54,6 +54,8 @@ import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 
+import { useQuasar } from "quasar";
+
 import { useMutation } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
@@ -119,6 +121,8 @@ export default defineComponent({
       return productsInCart;
     };
 
+    const $q = useQuasar();
+
     const add = () => {
       console.log("Массив" + productsInCart.value); //*
       if (!productsInCart.value.includes(productId.value)) {
@@ -129,6 +133,10 @@ export default defineComponent({
         changeUnits();
         console.log("Такой уже есть"); //*
       }
+      $q.notify({
+        message: "the product is added to the cart",
+        icon: "check",
+      });
     };
 
     const { mutate: addProductToCart } = useMutation(

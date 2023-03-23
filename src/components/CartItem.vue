@@ -36,19 +36,12 @@
       <q-btn @click="deleteFromCart(item.id)" flat icon="delete" />
     </div>
   </div>
-  <q-btn
-    class="q-ma-md"
-    @click="deleteAllFromCart"
-    flat
-    label="Delete all"
-    icon="delete"
-  />
 </template>
 
 <script>
-import { defineComponent, ref, onUpdated } from "vue";
-import { computed } from "vue";
+import { defineComponent, ref, onUpdated, computed } from "vue";
 import { useQuery, useMutation } from "@vue/apollo-composable";
+import { useQuasar } from "quasar";
 
 import gql from "graphql-tag";
 
@@ -106,9 +99,15 @@ export default defineComponent({
       }
     };
 
+    const $q = useQuasar();
+
     const deleteFromCart = async (id) => {
       const { data } = await deleteCartItem({
         id: id,
+      });
+      $q.notify({
+        message: "The product has been removed from the basket",
+        icon: "info",
       });
     };
 
