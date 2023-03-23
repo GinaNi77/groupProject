@@ -13,12 +13,7 @@
         </p>
         <CartItem v-for="item in items" :key="item.id" :item="item" />
         <div class="q-ma-md flex justify-end">
-          <q-btn
-            @click="deleteAllFromCarts"
-            flat
-            label="Delete all"
-            icon="delete"
-          />
+          <q-btn @click="deleteAll" flat label="Delete all" icon="delete" />
         </div>
         <p class="text-h5 text-weight-bold text-center">
           TOTAL: ${{ totalPrice() }}
@@ -56,8 +51,9 @@
 import CartItem from "../components/CartItem.vue";
 
 import { defineComponent, ref } from "vue";
-
 import { useQuery, useMutation } from "@vue/apollo-composable";
+import { useQuasar } from "quasar";
+
 import gql from "graphql-tag";
 
 export default defineComponent({
@@ -96,8 +92,18 @@ export default defineComponent({
       }
     `);
 
+    const $q = useQuasar();
+
+    const deleteAll = async () => {
+      const { data } = await deleteAllFromCarts();
+      $q.notify({
+        message: "The basket has been emptied",
+        icon: "info",
+      });
+    };
+
     const totalPrice = () => {
-      let total = 0; // = items.value.reduce((total, items.value.product.price) => total + items.value.product.price, 0);
+      let total = 0; // переписать на items.value.reduce()
       for (let i = 0; i < items.value.length; i++) {
         total += items.value[i].product.price * items.value[i].units;
       }
@@ -110,7 +116,15 @@ export default defineComponent({
       items.value = result.value.carts;
     });
 
-    return { result, items, loading, error, totalPrice, deleteAllFromCarts };
+    return {
+      result,
+      items,
+      loading,
+      error,
+      totalPrice,
+      deleteAllFromCarts,
+      deleteAll,
+    };
   },
 });
 </script>
