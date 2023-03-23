@@ -92,7 +92,6 @@ export default defineComponent({
 
     const getTotal = () => {
       localTotal = JSON.parse(localStorage.getItem("localTotal"));
-      console.log(localTotal);
     };
 
     const resetForm = () => {
