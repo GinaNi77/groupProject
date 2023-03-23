@@ -69,6 +69,7 @@ export default defineComponent({
             title
             sex
           }
+          units
           product_id
         }
       }
