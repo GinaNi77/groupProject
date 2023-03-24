@@ -38,6 +38,8 @@ import { defineComponent, onMounted, ref } from "vue";
 import gql from "graphql-tag";
 import { useMutation } from "@vue/apollo-composable";
 
+import { useQuasar } from "quasar";
+
 export default defineComponent({
   name: "Payment",
   setup() {
@@ -83,9 +85,16 @@ export default defineComponent({
       })
     );
 
+    const $q = useQuasar();
+
     const add = async () => {
       getTotal();
       const { data } = await addToOrder();
+      $q.notify({
+        message: "Your order has been shipped",
+        icon: "check",
+        timeout: 1000
+      });
       resetForm();
     };
 

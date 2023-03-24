@@ -105,6 +105,7 @@ export default defineComponent({
       $q.notify({
         message: "The basket has been emptied",
         icon: "info",
+        timeout: 1000
       });
     };
 

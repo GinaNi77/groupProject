@@ -140,6 +140,7 @@ export default defineComponent({
       $q.notify({
         message: "the product is added to the cart",
         icon: "check",
+        timeout: 1000
       });
     };
 

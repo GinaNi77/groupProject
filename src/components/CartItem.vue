@@ -110,6 +110,7 @@ export default defineComponent({
       $q.notify({
         message: "The product has been removed from the basket",
         icon: "info",
+        timeout: 1000
       });
     };
 
