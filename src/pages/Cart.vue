@@ -64,25 +64,31 @@ export default defineComponent({
   setup() {
     const items = ref([]);
 
-    const { result, loading, error, onResult } = useQuery(gql`
-      query MyQuery {
-        carts {
-          id
-          product {
-            color
-            description
+    const { result, loading, error, onResult, refetch } = useQuery(
+      gql`
+        query MyQuery {
+          carts {
             id
-            img
-            price
-            size
-            title
-            sex
+            product {
+              color
+              description
+              id
+              img
+              price
+              size
+              title
+              sex
+            }
+            units
+            product_id
           }
-          units
-          product_id
         }
+      `,
+      null,
+      {
+        pollInterval: 10,
       }
-    `);
+    );
 
     const { mutate: deleteAllFromCarts } = useMutation(gql`
       mutation MyMutation {
@@ -124,6 +130,7 @@ export default defineComponent({
       totalPrice,
       deleteAllFromCarts,
       deleteAll,
+      refetch,
     };
   },
 });
