@@ -138,9 +138,9 @@ export default defineComponent({
         changeUnits();
       }
       $q.notify({
-        message: "the product is added to the cart",
+        message: "The product is added to the cart",
         icon: "check",
-        timeout: 1000
+        timeout: 1000,
       });
     };
 

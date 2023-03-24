@@ -67,7 +67,7 @@ export default defineComponent({
     const { result, loading, error, onResult, refetch } = useQuery(
       gql`
         query MyQuery {
-          carts(order_by: {id: asc}) {
+          carts(order_by: { id: asc }) {
             id
             product {
               color
@@ -86,7 +86,7 @@ export default defineComponent({
       `,
       null,
       {
-        pollInterval: 1,
+        pollInterval: 100,
       }
     );
 
@@ -105,7 +105,7 @@ export default defineComponent({
       $q.notify({
         message: "The basket has been emptied",
         icon: "info",
-        timeout: 1000
+        timeout: 1000,
       });
     };
 

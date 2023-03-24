@@ -61,7 +61,7 @@
           :product="product"
         />
       </div>
-      <div class="flex justify-center" v-else>
+      <div class="flex justify-center v-catalog-empty" v-else>
         We are sorry, nothing was found
         <q-icon size="sm" name="sentiment_very_dissatisfied" />
       </div>
@@ -333,6 +333,17 @@ export default defineComponent({
   border-bottom: solid grey 1px;
 }
 
+.v-catalog-empty {
+  max-width: calc(100vw - 280px);
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .v-catalog-empty {
+    max-width: 100vw;
+    width: 100%;
+  }
+}
 @media (max-width: 650px) {
   .v-catalog {
     display: grid;
