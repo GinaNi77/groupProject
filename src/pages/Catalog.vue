@@ -53,19 +53,17 @@
       Error: {{ error.message }}
     </div>
 
-    <div class="flex justify-center q-mt-lg" v-else-if="products">
-      <div class="v-catalog">
-        <div class="flex justify-center" v-if="products.length">
-          <vCatalogItem
-            v-for="product in products"
-            :key="product.id"
-            :product="product"
-          />
-        </div>
-        <div class="flex justify-center" v-else>
-          We are sorry, nothing was found
-          <q-icon size="sm" name="sentiment_very_dissatisfied" />
-        </div>
+    <div class="flex q-mt-lg" v-else-if="products">
+      <div class="v-catalog" v-if="products.length">
+        <vCatalogItem
+          v-for="product in products"
+          :key="product.id"
+          :product="product"
+        />
+      </div>
+      <div class="flex justify-center" v-else>
+        We are sorry, nothing was found
+        <q-icon size="sm" name="sentiment_very_dissatisfied" />
       </div>
 
       <div class="v-menu" v-if="windowWitdh > 1100">
@@ -321,8 +319,11 @@ export default defineComponent({
 
 <style scoped>
 .v-catalog {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(260px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 0 auto;
   max-width: 830px;
-  width: 100%;
 }
 .v-menu {
   max-width: 250px;
@@ -330,5 +331,15 @@ export default defineComponent({
 }
 .v-gender {
   border-bottom: solid grey 1px;
+}
+
+@media (max-width: 650px) {
+  .v-catalog {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(260px, 1fr));
+    grid-template-columns: 1fr 1fr;
+    margin: 0 auto;
+    max-width: 830px;
+  }
 }
 </style>

@@ -86,7 +86,7 @@ export default defineComponent({
       `,
       null,
       {
-        pollInterval: 10,
+        pollInterval: 1,
       }
     );
 
