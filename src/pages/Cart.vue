@@ -67,7 +67,7 @@ export default defineComponent({
     const { result, loading, error, onResult, refetch } = useQuery(
       gql`
         query MyQuery {
-          carts {
+          carts(order_by: {id: asc}) {
             id
             product {
               color
