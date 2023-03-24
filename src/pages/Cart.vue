@@ -12,7 +12,7 @@
           SHOPPING CART
         </p>
         <CartItem v-for="item in items" :key="item.id" :item="item" />
-        <div class="q-ma-md flex justify-end">
+        <div class="q-mt-lg q-mb-md flex justify-end">
           <q-btn @click="deleteAll" flat label="Delete all" icon="delete" />
         </div>
         <p class="text-h5 text-weight-bold text-center">
