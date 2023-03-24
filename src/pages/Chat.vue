@@ -1,22 +1,24 @@
 <template>
-    <q-page>
-        <div  class="column items-center q-pa-xl">
-        <div style="width: 600px">
-            <div style="width: 100%; max-width: 600px" class="">
-                <q-chat-message v-for="message in msgs" :key="message.index"
+    <q-page class="column flex-center">
+        
+        
+            <q-card style="max-width: 600px" class="col full-width" flat>
+                <q-card-section>
+                    <q-chat-message v-for="message in msgs" :key="message.index"
                     :text="[message.text]"
                     :sent="checkSent(message)"
-                />
-            </div>
-        </div>
-        <div style="width: 60%">
-            <q-input v-model="msg" type="text" placeholder="Message...">
-                <template v-slot:after>
-                    <q-btn round dense flat text-color="black" icon="send" @click="sendMsg"/>
-                </template>
-            </q-input>
-        </div>
-        </div>
+                    />
+                </q-card-section>
+                <q-card-section style="width: 80%" class="full-width">
+                    <q-input v-model="msg" type="text" placeholder="Message...">
+                        <template v-slot:after>
+                            <q-btn round dense flat text-color="black" icon="send" @click="sendMsg"/>
+                        </template>
+                    </q-input>
+                </q-card-section>
+            </q-card>
+            
+      
     </q-page>
 </template>
 
